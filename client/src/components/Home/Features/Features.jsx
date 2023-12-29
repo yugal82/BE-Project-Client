@@ -22,7 +22,7 @@ const features = [
 
 const Features = () => {
     return (
-        <div className='py-8 px-12 sm:py-16 sm:px-24'>
+        <div className='p-12 sm:py-16 sm:px-24'>
             <div className=''>
                 <h2 className='text-3xl font-semibold text-white'>Features</h2>
             </div>

@@ -38,12 +38,12 @@ const Navbar = () => {
                 <div className='hidden sm:block'>
                     <ul className='w-full flex items-center justify-between'>
                         <div className='flex items-center justify-center'>
-                            <li className='text-base py-4 px-2 font-semibold cursor-pointer hover:underline'>About us</li>
-                            <Link to='/nft-marketplace'><li className='text-base py-4 px-2 font-semibold cursor-pointer hover:underline'>NFT Marketplace</li></Link>
-                            <Link to='/crowdfunding'><li className='text-base py-4 px-2 font-semibold cursor-pointer hover:underline'>Crowdfunding</li></Link>
+                            <li className='text-base py-4 px-2 font-semibold cursor-pointer hover:scale-110 transition-all ease-in-out duration-200'>About us</li>
+                            <Link to='/nft-marketplace'><li className='text-base py-4 px-2 font-semibold cursor-pointer hover:scale-110 transition-all ease-in-out duration-200'>NFT Marketplace</li></Link>
+                            <Link to='/crowdfunding'><li className='text-base py-4 px-2 font-semibold cursor-pointer hover:scale-110 transition-all ease-in-out duration-200'>Crowdfunding</li></Link>
                         </div>
                         <div className='ml-8'>
-                            <button type='btn' className='text-base p-3 font-semibold cursor-pointer bg-blue-700 text-white rounded-2xl hover:underline'>Connect wallet</button>
+                            <button type='btn' className='text-base p-3 font-semibold cursor-pointer bg-blue-700 text-white rounded-2xl'>Connect wallet</button>
                         </div>
                     </ul>
                 </div>
