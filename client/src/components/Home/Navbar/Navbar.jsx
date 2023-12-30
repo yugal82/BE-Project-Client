@@ -2,6 +2,8 @@ import React, { useState } from 'react'
 import { Link } from 'react-router-dom';
 import { GiHamburgerMenu } from "react-icons/gi";
 import { CgClose } from "react-icons/cg";
+import ConnectWalletBtn from '../../common/ConnectWalletBtn';
+
 
 const Navbar = () => {
     const [menuOpen, setMenuOpen] = useState(false);
@@ -31,7 +33,7 @@ const Navbar = () => {
                             </ul>
                         </div>
                         <div className='w-full flex items-center justify-center mx-auto mt-12'>
-                            <button className='text-3xl font-medium cursor-pointer bg-blue-700 text-white p-6 rounded-3xl'>Connect Wallet</button>
+                            <ConnectWalletBtn />
                         </div>
                     </div>
                 }
@@ -43,7 +45,7 @@ const Navbar = () => {
                             <Link to='/crowdfunding'><li className='text-base py-4 px-2 font-semibold cursor-pointer hover:scale-110 transition-all ease-in-out duration-200'>Crowdfunding</li></Link>
                         </div>
                         <div className='ml-8'>
-                            <button type='btn' className='text-base p-3 font-semibold cursor-pointer bg-blue-700 text-white rounded-2xl'>Connect wallet</button>
+                            <ConnectWalletBtn />
                         </div>
                     </ul>
                 </div>
