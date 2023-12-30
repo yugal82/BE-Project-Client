@@ -2,17 +2,8 @@ import React, { useState } from 'react'
 import { Link } from 'react-router-dom';
 import { GiHamburgerMenu } from "react-icons/gi";
 import { CgClose } from "react-icons/cg";
-import { ConnectWallet, darkTheme } from "@thirdweb-dev/react";
+import ConnectWalletBtn from '../../common/ConnectWalletBtn';
 
-const customDarkTheme = darkTheme({
-    fontFamily: "Inter, sans-serif",
-    colors: {
-        modalBg: "#111827",
-        accentText: "white",
-        primaryButtonBg: "#1d4ed8",
-        primaryButtonText: "white",
-    },
-});
 
 const Navbar = () => {
     const [menuOpen, setMenuOpen] = useState(false);
@@ -42,14 +33,7 @@ const Navbar = () => {
                             </ul>
                         </div>
                         <div className='w-full flex items-center justify-center mx-auto mt-12'>
-                            <ConnectWallet
-                                theme={customDarkTheme}
-                                dropdownPosition={{
-                                    side: "bottom",
-                                    align: "end",
-                                }}
-                                hideTestnetFaucet={false}
-                            />
+                            <ConnectWalletBtn />
                         </div>
                     </div>
                 }
@@ -61,14 +45,7 @@ const Navbar = () => {
                             <Link to='/crowdfunding'><li className='text-base py-4 px-2 font-semibold cursor-pointer hover:scale-110 transition-all ease-in-out duration-200'>Crowdfunding</li></Link>
                         </div>
                         <div className='ml-8'>
-                            <ConnectWallet
-                                theme={customDarkTheme}
-                                dropdownPosition={{
-                                    side: "bottom",
-                                    align: "end",
-                                }}
-                                hideTestnetFaucet={false}
-                            />
+                            <ConnectWalletBtn />
                         </div>
                     </ul>
                 </div>

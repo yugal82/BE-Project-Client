@@ -8,7 +8,7 @@ import {
 
 export default function Home() {
   return (
-    <div>
+    <div className="bg-gray-900">
       <Routes>
         <Route exact path="/" element={<Landing />} />
         <Route exact path="/nft-marketplace" element={<NFTHome />} />

@@ -1,15 +1,13 @@
-import { useAddress } from '@thirdweb-dev/react';
-import React, { useEffect } from 'react'
+import React from 'react'
+import ConnectWalletPopup from '../../common/popup/ConnectWalletPopup';
 
 const NFTHome = () => {
-  const address  = useAddress()
-  
-  useEffect(() => {
-    console.log(address);
-  }, [])
   
   return (
-    <div>NFTHome</div>
+    <div className='w-full h-screen'>
+      {/* <ConnectWalletPopup /> */}
+      <div>NFT Home</div>
+    </div>
   )
 }
 
