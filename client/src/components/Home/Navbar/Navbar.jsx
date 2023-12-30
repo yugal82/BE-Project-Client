@@ -2,6 +2,17 @@ import React, { useState } from 'react'
 import { Link } from 'react-router-dom';
 import { GiHamburgerMenu } from "react-icons/gi";
 import { CgClose } from "react-icons/cg";
+import { ConnectWallet, darkTheme } from "@thirdweb-dev/react";
+
+const customDarkTheme = darkTheme({
+    fontFamily: "Inter, sans-serif",
+    colors: {
+        modalBg: "#111827",
+        accentText: "white",
+        primaryButtonBg: "#1d4ed8",
+        primaryButtonText: "white",
+    },
+});
 
 const Navbar = () => {
     const [menuOpen, setMenuOpen] = useState(false);
@@ -31,7 +42,14 @@ const Navbar = () => {
                             </ul>
                         </div>
                         <div className='w-full flex items-center justify-center mx-auto mt-12'>
-                            <button className='text-3xl font-medium cursor-pointer bg-blue-700 text-white p-6 rounded-3xl'>Connect Wallet</button>
+                            <ConnectWallet
+                                theme={customDarkTheme}
+                                dropdownPosition={{
+                                    side: "bottom",
+                                    align: "end",
+                                }}
+                                hideTestnetFaucet={false}
+                            />
                         </div>
                     </div>
                 }
@@ -43,7 +61,14 @@ const Navbar = () => {
                             <Link to='/crowdfunding'><li className='text-base py-4 px-2 font-semibold cursor-pointer hover:scale-110 transition-all ease-in-out duration-200'>Crowdfunding</li></Link>
                         </div>
                         <div className='ml-8'>
-                            <button type='btn' className='text-base p-3 font-semibold cursor-pointer bg-blue-700 text-white rounded-2xl'>Connect wallet</button>
+                            <ConnectWallet
+                                theme={customDarkTheme}
+                                dropdownPosition={{
+                                    side: "bottom",
+                                    align: "end",
+                                }}
+                                hideTestnetFaucet={false}
+                            />
                         </div>
                     </ul>
                 </div>
