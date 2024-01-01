@@ -2,7 +2,7 @@ import React from 'react'
 import Navbar from '../Navbar/Navbar';
 import Hero from '../Hero/Hero';
 import Features from '../Features/Features';
-import Footer from '../Footer/Footer';
+import Footer from '../../common/Footer/Footer';
 
 const Landing = () => {
   return (
