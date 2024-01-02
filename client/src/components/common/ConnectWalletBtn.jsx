@@ -8,6 +8,7 @@ const customDarkTheme = darkTheme({
         accentText: "white",
         primaryButtonBg: "#1d4ed8",
         primaryButtonText: "white",
+        connectedButtonBg: '#111827',
     },
 });
 
