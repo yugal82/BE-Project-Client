@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 import ConnectWalletPopup from '../../common/popup/ConnectWalletPopup';
 import NFTNavbar from './NFTNavbar';
 import { useAddress } from '@thirdweb-dev/react';
@@ -9,15 +9,13 @@ const NFTHome = () => {
   const address = useAddress();
 
   return (
-    <div className='w-full'>
-      {
-        !address && <ConnectWalletPopup />
-      }
+    <div className="w-full">
+      {!address && <ConnectWalletPopup />}
       <NFTNavbar />
       <NFTHero />
       <Footer />
     </div>
-  )
-}
+  );
+};
 
 export default NFTHome;

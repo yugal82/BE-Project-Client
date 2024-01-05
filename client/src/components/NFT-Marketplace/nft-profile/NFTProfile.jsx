@@ -1,9 +1,7 @@
-import React from 'react'
+import React from 'react';
 
 const NFTProfile = () => {
-  return (
-    <div>NFTProfile</div>
-  )
-}
+  return <div>NFTProfile</div>;
+};
 
 export default NFTProfile;
