@@ -1,9 +1,7 @@
-import React from 'react'
+import React from 'react';
 
 const NFTExplore = () => {
-  return (
-    <div>NFTExplore</div>
-  )
-}
+  return <div>NFTExplore</div>;
+};
 
 export default NFTExplore;

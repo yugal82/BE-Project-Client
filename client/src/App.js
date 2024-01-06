@@ -1,13 +1,10 @@
-import Landing from "./components/Home/Landing/Landing";
-import NFTMain from "./components/NFT-Marketplace/NFTMain";
-import NFTCreate from "./components/NFT-Marketplace/nft-create/NFTCreate";
-import NFTExplore from "./components/NFT-Marketplace/nft-explore/NFTExplore";
-import NFTProfile from "./components/NFT-Marketplace/nft-profile/NFTProfile";
-import "./index.css";
-import {
-  Route,
-  Routes
-} from "react-router-dom";
+import Landing from './components/Home/Landing/Landing';
+import NFTMain from './components/NFT-Marketplace/NFTMain';
+import NFTCreate from './components/NFT-Marketplace/nft-create/NFTCreate';
+import NFTExplore from './components/NFT-Marketplace/nft-explore/NFTExplore';
+import NFTProfile from './components/NFT-Marketplace/nft-profile/NFTProfile';
+import './index.css';
+import { Route, Routes } from 'react-router-dom';
 
 export default function Home() {
   return (
