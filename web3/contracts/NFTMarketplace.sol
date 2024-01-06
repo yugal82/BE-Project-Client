@@ -47,29 +47,23 @@ contract NFTMarketplace is ERC721URIStorage {
         owner == payable(msg.sender);
     }
 
-
     // the below function allows the onwer to update the minting fee in the future.
-    function updateMintingFees(uint256 _newMintingFee)
-        public
-        payable
-        onlyOwner
-    {
+    function updateMintingFees(
+        uint256 _newMintingFee
+    ) public payable onlyOwner {
         mintingFee = _newMintingFee;
     }
-
 
     // view keyword is used when we "read" a state variable. As "mintingFee" is a state variable and we are "reading and returning" it, we use "view" keyword.
     function getMintingFeePrice() public view returns (uint256) {
         return mintingFee;
     }
 
-
     // Function for minting NFTs.
-    function mintNFT(uint256 _price, string memory tokenURI)
-        public
-        payable
-        returns (uint256)
-    {
+    function mintNFT(
+        uint256 _price,
+        string memory tokenURI
+    ) public payable returns (uint256) {
         _tokenIDs.increment();
 
         uint256 newTokenId = _tokenIDs.current();
@@ -81,7 +75,6 @@ contract NFTMarketplace is ERC721URIStorage {
 
         return newTokenId;
     }
-
 
     function createNFT(uint256 tokenId, uint256 price) private {
         require(price > 0, "Price cannot be negative.");
@@ -112,7 +105,6 @@ contract NFTMarketplace is ERC721URIStorage {
         );
     }
 
-
     // function for resell token. Allows the owner to sell the NFT
     function sellItem(uint256 tokenId, uint256 updatedPrice) public payable {
         require(
@@ -134,7 +126,6 @@ contract NFTMarketplace is ERC721URIStorage {
         _transfer(msg.sender, address(this), tokenId);
     }
 
-
     // function to buy listed NFT.
     function buyItem(uint256 tokenId) public payable {
         uint256 price = idMarketItem[tokenId].price;
@@ -154,7 +145,6 @@ contract NFTMarketplace is ERC721URIStorage {
         payable(owner).transfer(mintingFee);
         payable(idMarketItem[tokenId].seller).transfer(msg.value);
     }
-
 
     // the below function fetches the NFTs that are for sale. That means those items that are currently listed.
     function fetchListedMarketItems()
@@ -180,7 +170,6 @@ contract NFTMarketplace is ERC721URIStorage {
         return items;
     }
 
-
     // the below function is to fetch nfts owned by a particular user.
     function fetchUserNFTs() public view returns (MarketItem[] memory) {
         uint256 totalCount = _tokenIDs.current();
@@ -205,23 +194,26 @@ contract NFTMarketplace is ERC721URIStorage {
         return userNfts;
     }
 
-
     // the below functions fetches the listed items of a particular user.
-    function fetchListedItemsofUser() public view returns (MarketItem[] memory) {
+    function fetchListedItemsofUser()
+        public
+        view
+        returns (MarketItem[] memory)
+    {
         uint256 totalCount = _tokenIDs.current();
         uint256 itemCount = 0;
         uint256 currentIndex = 0;
 
         for (uint256 i = 0; i < totalCount; i++) {
-            if(idMarketItem[i+1].seller == msg.sender){
+            if (idMarketItem[i + 1].seller == msg.sender) {
                 itemCount++;
             }
         }
 
         MarketItem[] memory userListedItems = new MarketItem[](itemCount);
         for (uint256 i = 0; i < totalCount; i++) {
-            if(idMarketItem[i+1].seller == msg.sender){
-                MarketItem storage item = idMarketItem[i+1];
+            if (idMarketItem[i + 1].seller == msg.sender) {
+                MarketItem storage item = idMarketItem[i + 1];
                 userListedItems[currentIndex] = item;
 
                 currentIndex++;
