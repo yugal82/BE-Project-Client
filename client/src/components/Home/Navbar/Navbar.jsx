@@ -12,7 +12,7 @@ const Navbar = () => {
 
   return (
     <div className="relative w-full sm:w-[85%] flex mx-auto">
-      <div className="w-full sm:py-1 sm:px-6 sm:flex sm:items-center sm:justify-between bg-white text-gray-900 sm:mt-10 sm:rounded-3xl">
+      <div className="w-full sm:py-1 sm:px-6 sm:flex sm:items-center sm:justify-between bg-white text-gray-900 sm:mt-10 sm:rounded-2xl">
         <div className="font-semibold py-4 sm:py-0 flex items-center justify-between">
           <Link to="/">
             <span className="text-3xl font-bold sm:text-xl p-4 sm:px-0 sm:py-0 cursor-pointer">DeKrypt</span>
@@ -76,4 +76,4 @@ const Navbar = () => {
   );
 };
 
-export default Navbar
+export default Navbar;

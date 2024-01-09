@@ -24,7 +24,7 @@ const Footer = () => {
         <div className="mt-2">
           <ul className="text-sm md:text-lg md:flex md:items-center md:justify-between">
             <Link to="/">
-              <li className="px-1 py-2 sm:py-0 smmd:px-2 cursor-pointer hover:scale-110 transition-all ease-in-out duration-200">
+              <li className="px-1 py-2 sm:py-0 sm,md:px-2 cursor-pointer hover:scale-110 transition-all ease-in-out duration-200">
                 Home
               </li>
             </Link>
