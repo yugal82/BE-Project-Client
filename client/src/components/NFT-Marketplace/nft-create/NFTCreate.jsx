@@ -18,6 +18,12 @@ const NFTCreate = () => {
   const [descError, setDescError] = useState(false);
   const [imgFileError, setImgFileError] = useState(false);
   const [preview, setPreview] = useState(false);
+  const [properties, setProperties] = useState([
+    {
+      trait: '',
+      value: '',
+    },
+  ]);
 
   // refs
   const itemNameRef = useRef('');
@@ -66,10 +72,35 @@ const NFTCreate = () => {
     itemNameRef.current.value = '';
     descriptionRef.current.value = '';
     externalLinkRef.current.value = '';
+
+    // reset the properties
+    setProperties([{ trait: '', value: '' }]);
   };
 
   const isValidItemName = (inputString) => (inputString === '' ? false : true);
   const isValidDesc = (inputString) => (inputString === '' ? false : true);
+
+  const handlePropertyAdd = (e) => {
+    e.preventDefault();
+    setProperties([...properties, { trait: '', value: '' }]);
+  };
+
+  const handlePropertyRemove = (e) => {
+    e.preventDefault();
+    if (properties.length <= 1) {
+      alert('Atleast one property');
+      return;
+    }
+    const currentTrais = [...properties];
+    currentTrais.pop();
+    setProperties(currentTrais);
+  };
+
+  const handlePropertyChange = (e, index) => {
+    const currentProperties = [...properties];
+    currentProperties[index][e.target.name] = e.target.value;
+    setProperties(currentProperties);
+  };
 
   return (
     <div className="">
@@ -202,17 +233,28 @@ const NFTCreate = () => {
           <div className="mt-6">
             <span className="text-white block">Properties</span>
             <small className="text-gray-500 block">Traits you can use to Describe your NFT</small>
-            <PropertiesComponent />
-
-            {/* remove this later, this just to see how the UI looks with multiple components. */}
-            <PropertiesComponent />
-            <PropertiesComponent />
+            {properties?.map((property, index) => (
+              <PropertiesComponent
+                property={property}
+                index={index}
+                key={index}
+                handlePropertyChange={handlePropertyChange}
+              />
+            ))}
 
             <div className="flex items-center mt-4">
-              <button className="text-white text-3xl mx-1 hover:scale-110 transition-all ease-in-out duration-200">
+              <button
+                onClick={(e) => handlePropertyAdd(e)}
+                type="button"
+                className="text-white text-3xl mx-1 hover:scale-110 transition-all ease-in-out duration-200"
+              >
                 <GrAdd />
               </button>
-              <button className="text-white text-3xl mx-1 hover:scale-110 transition-all ease-in-out duration-200">
+              <button
+                onClick={(e) => handlePropertyRemove(e)}
+                type="button"
+                className="text-white text-3xl mx-1 hover:scale-110 transition-all ease-in-out duration-200"
+              >
                 <HiOutlineMinus />
               </button>
             </div>
