@@ -5,8 +5,12 @@ import { GrAdd } from 'react-icons/gr';
 import { HiOutlineMinus } from 'react-icons/hi';
 import PropertiesComponent from './PropertiesComponent';
 import { FaX } from 'react-icons/fa6';
+import { useAddress } from '@thirdweb-dev/react';
+import ConnectWalletPopup from '../../common/popup/ConnectWalletPopup';
 
 const NFTCreate = () => {
+  const address = useAddress();
+
   // states
   const [formData, setFormData] = useState({
     itemName: '',
@@ -18,6 +22,12 @@ const NFTCreate = () => {
   const [descError, setDescError] = useState(false);
   const [imgFileError, setImgFileError] = useState(false);
   const [preview, setPreview] = useState(false);
+  const [properties, setProperties] = useState([
+    {
+      trait: '',
+      value: '',
+    },
+  ]);
 
   // refs
   const itemNameRef = useRef('');
@@ -66,13 +76,39 @@ const NFTCreate = () => {
     itemNameRef.current.value = '';
     descriptionRef.current.value = '';
     externalLinkRef.current.value = '';
+
+    // reset the properties
+    setProperties([{ trait: '', value: '' }]);
   };
 
   const isValidItemName = (inputString) => (inputString === '' ? false : true);
   const isValidDesc = (inputString) => (inputString === '' ? false : true);
 
+  const handlePropertyAdd = (e) => {
+    e.preventDefault();
+    setProperties([...properties, { trait: '', value: '' }]);
+  };
+
+  const handlePropertyRemove = (e) => {
+    e.preventDefault();
+    if (properties.length <= 1) {
+      alert('Atleast one property');
+      return;
+    }
+    const currentTrais = [...properties];
+    currentTrais.pop();
+    setProperties(currentTrais);
+  };
+
+  const handlePropertyChange = (e, index) => {
+    const currentProperties = [...properties];
+    currentProperties[index][e.target.name] = e.target.value;
+    setProperties(currentProperties);
+  };
+
   return (
     <div className="">
+      {!address && <ConnectWalletPopup />}
       <NFTNavbar />
       <div className="w-full px-8 py-12 sm:py-16 text-white">
         <h2 className="text-3xl font-semibold">Create a new NFT</h2>
@@ -202,17 +238,28 @@ const NFTCreate = () => {
           <div className="mt-6">
             <span className="text-white block">Properties</span>
             <small className="text-gray-500 block">Traits you can use to Describe your NFT</small>
-            <PropertiesComponent />
-
-            {/* remove this later, this just to see how the UI looks with multiple components. */}
-            <PropertiesComponent />
-            <PropertiesComponent />
+            {properties?.map((property, index) => (
+              <PropertiesComponent
+                property={property}
+                index={index}
+                key={index}
+                handlePropertyChange={handlePropertyChange}
+              />
+            ))}
 
             <div className="flex items-center mt-4">
-              <button className="text-white text-3xl mx-1 hover:scale-110 transition-all ease-in-out duration-200">
+              <button
+                onClick={(e) => handlePropertyAdd(e)}
+                type="button"
+                className="text-white text-3xl mx-1 hover:scale-110 transition-all ease-in-out duration-200"
+              >
                 <GrAdd />
               </button>
-              <button className="text-white text-3xl mx-1 hover:scale-110 transition-all ease-in-out duration-200">
+              <button
+                onClick={(e) => handlePropertyRemove(e)}
+                type="button"
+                className="text-white text-3xl mx-1 hover:scale-110 transition-all ease-in-out duration-200"
+              >
                 <HiOutlineMinus />
               </button>
             </div>
