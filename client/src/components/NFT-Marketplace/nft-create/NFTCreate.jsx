@@ -5,8 +5,12 @@ import { GrAdd } from 'react-icons/gr';
 import { HiOutlineMinus } from 'react-icons/hi';
 import PropertiesComponent from './PropertiesComponent';
 import { FaX } from 'react-icons/fa6';
+import { useAddress } from '@thirdweb-dev/react';
+import ConnectWalletPopup from '../../common/popup/ConnectWalletPopup';
 
 const NFTCreate = () => {
+  const address = useAddress();
+
   // states
   const [formData, setFormData] = useState({
     itemName: '',
@@ -104,6 +108,7 @@ const NFTCreate = () => {
 
   return (
     <div className="">
+      {!address && <ConnectWalletPopup />}
       <NFTNavbar />
       <div className="w-full px-8 py-12 sm:py-16 text-white">
         <h2 className="text-3xl font-semibold">Create a new NFT</h2>
