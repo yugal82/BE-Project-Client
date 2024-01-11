@@ -28,7 +28,7 @@ const Features = () => {
   return (
     <div className="p-12 sm:py-16 sm:px-24">
       <div className="">
-        <h2 className="text-3xl font-semibold text-white">Features</h2>
+        <h2 className="text-3xl text-center font-semibold text-white">Features</h2>
       </div>
       <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-y-6 sm:gap-x-6 text-white mt-6">
         {features.map((feature, index) => {
