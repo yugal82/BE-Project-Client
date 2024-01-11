@@ -7,39 +7,43 @@ import { Link } from 'react-router-dom';
 const Footer = () => {
   return (
     <div className="bg-gray-800 rounded-t-2xl p-16 text-white">
-      <div className="flex flex-col md:flex-row justify-between items-center">
-        <div className="text-3xl md:text-4xl font-bold mb-6 md:mb-0">DeKrypt</div>
-        <div className="flex space-x-10 items-center">
-          <FaXTwitter className="text-2xl md:text-3xl hover:text-blue-400 transition duration-300 cursor-pointer transform hover:scale-110" />
-          <FaDiscord className="text-2xl md:text-3xl hover:text-blue-400 transition duration-300 cursor-pointer transform hover:scale-110" />
-          <FaInstagram className="text-2xl md:text-3xl hover:text-blue-400 transition duration-300 cursor-pointer transform hover:scale-110" />
-        </div>
-      </div>
-      <div className="mt-6 text-base md:text-lg text-center md:text-left">
-        <p>&copy; 2024 All rights reserved.</p>
-        <p>
-          This project is fueled by{' '}
-          <a href="https://ethereum.org/" target="_blank" rel="noopener noreferrer" className="hover:text-blue-400">
-            <SiEthereum className="inline-block text-2xl" /> ETH
-          </a>
-        </p>
-      </div>
-      <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-8 text-base md:text-lg mt-6 justify-center md:justify-end">
-        <div className="md:text-right">
-          <Link to="/" className="hover:text-blue-400 transition duration-300">
-            Home
-          </Link>
-        </div>
-        <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-8 text-base md:text-lg mt-6 justify-center md:justify-end">
-          <div className="md:text-right">
-            <Link to="/nft-marketplace" className="hover:text-blue-400 transition duration-300">
-              Explore NFTs
-            </Link>
+      <div className="md:flex md:items-center md:justify-between">
+        <div className="flex-col md:justify-between md:items-center">
+          <div className="text-3xl md:text-4xl font-bold md:mb-0">DeKrypt</div>
+          <div className="mt-2 text-base">
+            <p>&copy; 2024 All rights reserved.</p>
+            <p>
+              This project is fueled by{' '}
+              <a href="https://ethereum.org/" target="_blank" rel="noopener noreferrer" className="hover:text-blue-400">
+                <SiEthereum className="inline-block text-2xl" /> ETH
+              </a>
+            </p>
           </div>
-          <div className="md:text-right">
-            <Link to="/Crowdfunding" className="hover:text-blue-400 transition duration-300">
-              CrowdFunding
-            </Link>
+        </div>
+        <div className="flex-col justify-start md:justify-end mt-8 md:mt-0">
+          <div className="flex space-x-8 items-center md:justify-end">
+            <FaXTwitter className="text-2xl md:text-3xl hover:text-blue-400 transition duration-300 cursor-pointer transform hover:scale-110" />
+            <FaDiscord className="text-2xl md:text-3xl hover:text-blue-400 transition duration-300 cursor-pointer transform hover:scale-110" />
+            <FaInstagram className="text-2xl md:text-3xl hover:text-blue-400 transition duration-300 cursor-pointer transform hover:scale-110" />
+          </div>
+          <div className="mt-4 md:mt-2">
+            <ul className="text-sm md:text-lg md:flex md:items-center md:justify-between">
+              <Link to="/">
+                <li className="px-1 py-2 sm:py-0 sm:px-2 cursor-pointer hover:text-blue-400 transition-all ease-in-out duration-300">
+                  Home
+                </li>
+              </Link>
+              <Link to="/nft-marketplace">
+                <li className="px-1 py-2 sm:py-0 sm:px-2 cursor-pointer hover:text-blue-400 transition-all ease-in-out duration-300">
+                  Explore NFTs
+                </li>
+              </Link>
+              <Link to="/crowdfunding">
+                <li className="px-1 py-2 sm:py-0 sm:px-2 cursor-pointer hover:text-blue-400 transition-all ease-in-out duration-300">
+                  Crowdfunding
+                </li>
+              </Link>
+            </ul>
           </div>
         </div>
       </div>
