@@ -10,8 +10,8 @@ const NFTDetails = () => {
     <div>
       <NFTNavbar />
       <div className="w-full px-8 py-12 sm:py-16 text-white">
-        <div className="w-full px-16 flex">
-          <div className="sm:w-8/12 rounded-lg">
+        <div className="w-full sm:px-10 md:px-16 md:flex">
+          <div className="md:w-8/12 rounded-lg">
             <img
               className="rounded-lg border-2 border-gray-800"
               src="https://images.unsplash.com/photo-1640340434868-6877662a809f?q=80&w=1964&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
@@ -46,7 +46,7 @@ const NFTDetails = () => {
                 <p className="text-3xl font-semibold">10 ETH</p>
               </div>
               <div className="">
-                <button className="py-3 px-24 bg-[#1d4ed8] font-semibold text-lg rounded-lg">Buy Now</button>
+                <button className="py-3 px-4 md:px-20 bg-[#1d4ed8] font-semibold text-lg rounded-lg">Buy Now</button>
               </div>
             </div>
             <div className="py-4">

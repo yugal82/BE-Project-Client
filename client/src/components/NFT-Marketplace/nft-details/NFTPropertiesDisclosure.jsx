@@ -26,7 +26,7 @@ const NFTPropertiesDisclosure = () => {
                 leaveTo="transform scale-95 opacity-0"
               >
                 <Disclosure.Panel className="px-4 pb-2 pt-4 text-sm text-white">
-                  <div className="grid grid-cols-4 gap-2">
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                     <div className="border-2 border-gray-600 rounded-lg p-2">
                       <p className="">Trait</p>
                       <p className="text-lg leading-tight">Value</p>
