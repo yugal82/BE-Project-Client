@@ -1,50 +1,49 @@
 import React from 'react';
 import FeatureCard from './FeatureCard';
-import { ConversationIMG, Scalable, NoAds } from '../../../imageAssets/index';
 
 const features = [
   {
+    header: 'NFT Marketplace',
+    description: 'Earn money by leveraging your creative side by creating and selling NFTs.',
+    imageURL: './assets/nft-marketplace-icon.png',
+  },
+  {
+    header: 'Crowdfunding Campaigns',
+    description: 'Create crowdfunding campaigns and raise money for a good cause.',
+    imageURL: './assets/crowdfunding-icon.png',
+  },
+  {
+    header: 'Secure',
+    description: 'Safely trade NFTs and launch secure crowdfunding campaigns with ease.',
+    imageURL: './assets/secure-icon.png',
+  },
+  {
     header: 'Conversational UI',
     description: 'Never find yourself struggling to navigate again.',
-    imageURL: ConversationIMG,
+    imageURL: './assets/conversation.png',
   },
   {
     header: 'Scalable',
-    description: 'Good development practices are at the heart of our operation.',
-    imageURL: Scalable,
+    description: 'Enjoy limitless growth with our scalable solution, designed to expand seamlessly.',
+    imageURL: './assets/scalable.png',
   },
   {
     header: 'No Ads',
     description: 'We know you do not like annoying pop-ups, 100% Ads free.',
-    imageURL: NoAds,
-  },
-  {
-    header: 'Conversational UI',
-    description: 'Never find yourself struggling to navigate again.',
-    imageURL: ConversationIMG,
-  },
-  {
-    header: 'Conversational UI',
-    description: 'Never find yourself struggling to navigate again.',
-    imageURL: ConversationIMG,
-  },
-  {
-    header: 'Conversational UI',
-    description: 'Never find yourself struggling to navigate again.',
-    imageURL: ConversationIMG,
+    imageURL: './assets/noads.png',
   },
 ];
 
 const Features = () => {
   return (
     <div className="p-12 sm:py-16 sm:px-24">
-      <div className="pb-6">
-        <h2 className="text-3xl text-center font-medium text-white">Built for the community.</h2>
+      <div className="">
+        <h2 className="text-3xl text-center font-semibold text-white">Built for the community.</h2>
         <p className="text-center text-gray-400 mt-2 font-normal">
           We believe in building an eco-system for the builders of next-gen.
         </p>
       </div>
-      <div className="w-full content-center grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-y-6 sm:gap-x-6 text-white mt-6">
+      <div className="w-full content-center grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-y-4 text-white mt-6">
         {features.map((feature, index) => {
           return (
             <FeatureCard
