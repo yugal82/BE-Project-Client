@@ -7,6 +7,7 @@ import NFTProfile from './components/NFT-Marketplace/nft-profile/NFTProfile';
 import CrowdfundingMain from './components/Crowdfunding/CrowdfundingMain';
 import './index.css';
 import { Route, Routes } from 'react-router-dom';
+import CrowdCreate from './components/Crowdfunding/crowd-create/CrowdCreate';
 
 export default function Home() {
   return (
@@ -18,6 +19,7 @@ export default function Home() {
         <Route exact path="/nft-marketplace/profile" element={<NFTProfile />} />
         <Route exact path="/nft-marketplace/create" element={<NFTCreate />} />
         <Route exact path="/crowdfunding" element={<CrowdfundingMain />} />
+        <Route exact path="/crowdfunding/create-campaign" element={<CrowdCreate />} />
         <Route exact path="/token/:contractAddress/:tokenId" element={<NFTDetails />} />
       </Routes>
     </div>
