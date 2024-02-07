@@ -27,7 +27,7 @@ const CrowdService = () => {
       </div>
       <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-y-6 sm:gap-x-6 text-white mt-14">
         {crowdservices.map((service) => (
-          <CrowdServiceCard service={service} />
+          <CrowdServiceCard key={service.step} service={service} />
         ))}
       </div>
     </div>
