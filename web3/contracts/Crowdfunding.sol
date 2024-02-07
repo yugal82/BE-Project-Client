@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity ^0.8.9; // which version of compiler to use
+pragma solidity ^0.8.17; // which version of compiler to use
 
 contract CrowdFunding {
     struct Campaign {
