@@ -1,13 +1,13 @@
 // here all the functions related to functionality such as posting data to IPFS, minting NFTs, listing NFTs for sale, buying NFTs, etc will be defined and exported here.
 
 import axios from 'axios';
-import { pinataAPIKey, pinataAPISecret, pinataJWT } from '../utils/constants';
-const pinata_jwt = `Bearer ${pinataJWT}`;
+const pinata_jwt = `Bearer ${process.env.REACT_APP_PINATA_JWT}`;
 
 export const uploadImgToIPFS = async (image) => {
+  console.log(process.env.REACT_APP_PINATA_JWT);
   const pinataUrl = 'https://api.pinata.cloud/pinning/pinFileToIPFS';
   const data = new FormData();
-  data.append('fileUpload', data);
+  data.append('file', image);
 
   try {
     const res = await axios.post(pinataUrl, data, {
@@ -17,7 +17,7 @@ export const uploadImgToIPFS = async (image) => {
         Authorization: pinata_jwt,
       },
     });
-    return res;
+    return res.data;
   } catch (error) {
     console.log(error);
   }

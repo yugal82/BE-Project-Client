@@ -13,7 +13,7 @@ const NFTCreate = () => {
   const address = useAddress();
 
   // states
-  const [imgFile, setImgFile] = useState();
+  const [imgFile, setImgFile] = useState(null);
   const [itemNameError, setItemNameError] = useState(false);
   const [descError, setDescError] = useState(false);
   const [imgFileError, setImgFileError] = useState(false);
@@ -32,7 +32,6 @@ const NFTCreate = () => {
 
   // form submission handling
   const handleFormSubmit = async (e) => {
-    console.log(imgFile);
     e.preventDefault();
 
     // check form validation
@@ -48,19 +47,24 @@ const NFTCreate = () => {
       // 3. Call contract function to mint NFT
 
       // function call to upload the image to IPFS.
-      // const imageIPFS = await uploadImgToIPFS(imgFile);
-      // console.log(imageIPFS);
+      const imageIPFS = await uploadImgToIPFS(imgFile);
 
       // upload metadata with image URI to IPFS.
-      const nftMetadataJson = {
-        itemName: itemNameRef.current.value,
-        externalLink: externalLinkRef.current.value,
-        description: descriptionRef.current.value,
-        attributes: properties,
-        image: imgFile,
-      };
-      const uri = await uploadJsonMetadataToIPFS(nftMetadataJson);
-      console.log(uri);
+      let uri;
+      if (imageIPFS.IpfsHash) {
+        const nftMetadataJson = {
+          itemName: itemNameRef.current.value,
+          externalLink: externalLinkRef.current.value,
+          description: descriptionRef.current.value,
+          attributes: properties,
+          image: `https://ipfs.io/ipfs/${imageIPFS?.IpfsHash}`,
+        };
+
+        uri = await uploadJsonMetadataToIPFS(nftMetadataJson);
+      } else {
+        alert('Error while uploading image to IPFS');
+        // change this error message and alert to a popup for better user experience.
+      }
 
       resetForm();
     }
