@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 
-pragma solidity ^0.8.17;
+pragma solidity ^0.8.20;
 
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
@@ -10,12 +10,12 @@ contract NFTMarketplace is ERC721URIStorage {
     using Counters for Counters.Counter;
 
     Counters.Counter private _tokenIDs;
-    Counters.Counter private _itemsSold;
 
-    uint256 mintingFee = 0.0025 ether; // this listing fee is amount of ether that the creator will be required to pay while creating an NFT.
+    // this listing fee is amount of ether that the creator will be required to pay while creating an NFT.
+    uint256 mintingFee = 0.0025 ether;
 
-    address payable owner;
     // payable keyword is used becuase owner can receive funds. If not used, then the owner will be unable to withdraw any balance funds.
+    address payable owner;
 
     // the mapping is between the _tokenIds and MarketItem(i.e NFT). Since each NFT created will have a unique ID, the created NFT should be mapped with that associated tokenId
     mapping(uint256 => MarketItem) private idMarketItem;
@@ -26,7 +26,7 @@ contract NFTMarketplace is ERC721URIStorage {
         address payable seller;
         address payable owner;
         uint256 price;
-        bool sold;
+        bool isListed;
     }
 
     // whenever an item is created, the below event will be triggered.
@@ -35,8 +35,10 @@ contract NFTMarketplace is ERC721URIStorage {
         address seller,
         address owner,
         uint256 price,
-        bool sold
+        bool isListed
     );
+
+    MarketItem[] private itemsListed;
 
     modifier onlyOwner() {
         require(msg.sender == owner, "Only onwer can perform this function");
@@ -44,13 +46,15 @@ contract NFTMarketplace is ERC721URIStorage {
     }
 
     constructor() ERC721("DeKrypt", "DKPT") {
-        owner == payable(msg.sender);
+        owner = payable(msg.sender);
     }
 
     // the below function allows the onwer to update the minting fee in the future.
-    function updateMintingFees(
-        uint256 _newMintingFee
-    ) public payable onlyOwner {
+    function updateMintingFees(uint256 _newMintingFee)
+        public
+        payable
+        onlyOwner
+    {
         mintingFee = _newMintingFee;
     }
 
@@ -60,10 +64,11 @@ contract NFTMarketplace is ERC721URIStorage {
     }
 
     // Function for minting NFTs.
-    function mintNFT(
-        uint256 _price,
-        string memory tokenURI
-    ) public payable returns (uint256) {
+    function mintNFT(uint256 _price, string memory tokenURI)
+        public
+        payable
+        returns (uint256)
+    {
         _tokenIDs.increment();
 
         uint256 newTokenId = _tokenIDs.current();
@@ -78,72 +83,86 @@ contract NFTMarketplace is ERC721URIStorage {
 
     function createNFT(uint256 tokenId, uint256 price) private {
         require(price > 0, "Price cannot be negative.");
-        // require(
-        //     msg.value == mintingFee,
-        //     "Price me must be equal to minting price"
-        // );
 
         // we push the marketItem created in the mapping defined above
         idMarketItem[tokenId] = MarketItem(
             tokenId,
             payable(msg.sender),
-            payable(address(this)),
+            payable(msg.sender),
             price,
             false
         );
-
-        // we transfer the token (NFT) to the contract address. So after the transfer function is executed, the owner of the token will be address(this) i.e the contract address.
-        _transfer(msg.sender, address(this), tokenId);
 
         // After there is transfer of NFTs, we emit the event that we have created.
         emit MarketItemCreated(
             tokenId,
             msg.sender,
-            address(this),
+            msg.sender,
             price,
-            false
+            false // this boolean value shows that the item is not listed for buying 
         );
     }
 
-    // function for resell token. Allows the owner to sell the NFT
-    function sellItem(uint256 tokenId, uint256 updatedPrice) public payable {
+    // function for resell token. Allows the owner to sell the NFT. i.e this is the funtion to list NFTs for sale.
+    function listItem(uint256 tokenId, uint256 updatedPrice) public payable {
         require(
             idMarketItem[tokenId].owner == msg.sender,
             "Only NFT owner can perform this function."
         );
         require(
-            msg.value == mintingFee,
-            "Price must atleast equal to Minting Price Fee"
+            updatedPrice > 0,
+            "Price must be atleast equal to Minting Price Fee"
         );
+        require(idMarketItem[tokenId].isListed == false, "The item is already listed.");
 
-        idMarketItem[tokenId].sold = false;
         idMarketItem[tokenId].price = updatedPrice;
         idMarketItem[tokenId].seller = payable(msg.sender);
         idMarketItem[tokenId].owner = payable(address(this));
+        idMarketItem[tokenId].isListed = true;
 
-        _itemsSold.decrement();
+        // now since the item is listed, we make a new element of type MarketItem and push it in the itemsListed array
+        MarketItem memory newItem = MarketItem(
+            tokenId,
+            payable(msg.sender),
+            payable(address(this)),
+            updatedPrice,
+            true
+        );
+        itemsListed.push(newItem);
 
         _transfer(msg.sender, address(this), tokenId);
+        // after the above line is executed, the address of the smart contract becomes the owner of the item. This lets the marketplace to dislay the items which are listed for sale.
     }
 
     // function to buy listed NFT.
     function buyItem(uint256 tokenId) public payable {
-        uint256 price = idMarketItem[tokenId].price;
-
+        // keep the track of which tokenId item is being bought as we need to pop it out of itemsListed array afterwords
+        uint256 index = 0;
+        for(uint i = 0; i < itemsListed.length; i++) {
+            if(itemsListed[i].tokenId == tokenId){
+                index = i;
+                break;
+            }
+        }
+        
+        require(idMarketItem[tokenId].isListed == true, "The item is not yet listed for sale.");
         require(
-            msg.value == price,
+            msg.value >= idMarketItem[tokenId].price,
             "Please submit the asking price to complete the purchase."
         );
 
-        idMarketItem[tokenId].owner = payable(msg.sender);
-        idMarketItem[tokenId].sold = true;
-        idMarketItem[tokenId].owner = payable(address(this));
-
-        _itemsSold.increment();
-
         _transfer(address(this), msg.sender, tokenId);
-        payable(owner).transfer(mintingFee);
-        payable(idMarketItem[tokenId].seller).transfer(msg.value);
+        payable(idMarketItem[tokenId].seller).transfer(msg.value - mintingFee);
+
+        idMarketItem[tokenId].owner = payable(msg.sender);
+        idMarketItem[tokenId].seller = payable(msg.sender);
+        idMarketItem[tokenId].isListed = false;
+
+        // as the token is bought by the user, it is no longer listed on the marketplace. So we remove the item from the itemsListed array
+        for(uint i = index; i < itemsListed.length-1; i++){
+            itemsListed[i] = itemsListed[i+1];
+        }
+        itemsListed.pop();
     }
 
     // the below function fetches the NFTs that are for sale. That means those items that are currently listed.
@@ -153,9 +172,14 @@ contract NFTMarketplace is ERC721URIStorage {
         returns (MarketItem[] memory)
     {
         uint256 itemCount = _tokenIDs.current();
-        uint256 listedItems = itemCount - _itemsSold.current();
-        uint256 currentIndex = 0;
+        uint256 listedItems = 0;
+        for(uint256 i = 0; i < itemsListed.length; i++){
+            if(itemsListed[i].isListed){
+                listedItems++;
+            }
+        }
 
+        uint256 currentIndex = 0;
         MarketItem[] memory items = new MarketItem[](listedItems);
         for (uint256 i = 0; i < itemCount; i++) {
             // we check the below condition because only those NFTs will be checked that are owned by the contract address.
@@ -195,25 +219,21 @@ contract NFTMarketplace is ERC721URIStorage {
     }
 
     // the below functions fetches the listed items of a particular user.
-    function fetchListedItemsofUser()
-        public
-        view
-        returns (MarketItem[] memory)
-    {
+    function fetchListedItemsofUser() public view returns (MarketItem[] memory) {
         uint256 totalCount = _tokenIDs.current();
         uint256 itemCount = 0;
         uint256 currentIndex = 0;
 
         for (uint256 i = 0; i < totalCount; i++) {
-            if (idMarketItem[i + 1].seller == msg.sender) {
+            if(idMarketItem[i+1].seller == msg.sender){
                 itemCount++;
             }
         }
 
         MarketItem[] memory userListedItems = new MarketItem[](itemCount);
         for (uint256 i = 0; i < totalCount; i++) {
-            if (idMarketItem[i + 1].seller == msg.sender) {
-                MarketItem storage item = idMarketItem[i + 1];
+            if(idMarketItem[i+1].seller == msg.sender){
+                MarketItem storage item = idMarketItem[i+1];
                 userListedItems[currentIndex] = item;
 
                 currentIndex++;
@@ -221,5 +241,11 @@ contract NFTMarketplace is ERC721URIStorage {
         }
 
         return userListedItems;
+    }
+
+    // function to withdraw funds in the owner's account.
+    function withdraw() public onlyOwner {
+        require(address(this).balance > 0, "Balance is zero");
+        payable(owner).transfer(address(this).balance);
     }
 }

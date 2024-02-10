@@ -26,11 +26,12 @@ const CreateCampaign = () => {
   const handleSubmit = () => {};
 
   return (
-    <div className="bg-[#1f1f34] flex justify-center items-center flex-col rounded-[10px] sm:p-10 p-4 my-6 mx-2 md:mx-16  md:my-12 ">
-      <div className="flex justify-center items-center p-[16px] sm:min-w-[380px] bg-[#1d1d28]  outline-[1px] outline outline-gray-400 rounded-[10px]">
-        <h1 className="font-epilogue font-bold sm:text-[25px] text-[18px] leading-[38px] text-white">
-          Start a Campaign
-        </h1>
+    <div className=" flex justify-center items-center flex-col rounded-[10px] sm:p-10 p-4 my-6 mx-2 md:mx-16  md:my-12 ">
+      <div className="w-full text-white">
+        <h2 className="text-3xl font-semibold">Start a Campaign</h2>
+        <span>
+          <span className="text-red-700">*</span> Required fields
+        </span>
       </div>
       <form action="" onSubmit={handleSubmit} className="w-full mt-[65px] flex flex-col gap-[30px]">
         <div className="flex flex-wrap gap-[40px]">
@@ -56,9 +57,9 @@ const CreateCampaign = () => {
           value={form.description}
           handleChange={(e) => handleFormFieldChange('description', e)}
         />
-        <div className="flex bg-[#3c80da] h-[120px] rounded-[10px] p-6 w-full justify-start items-center">
+        <div className="flex bg-[#1d4ed8] h-[120px] rounded-[10px] p-6 w-full justify-start items-center">
           <img src={Money} alt="Bannerimage" className=" w-[40px] h-[40px] object-contain" />
-          <h4 className="font-epilogue font-bold text-[25px] text-white ml-[20px] ">
+          <h4 className="font-bold text-xl sm:text-2xl text-white ml-[20px] ">
             You will get 100% of the raised amount.
           </h4>
         </div>
@@ -79,14 +80,14 @@ const CreateCampaign = () => {
           />
         </div>
         <FormField
-          labelName="Campaign Image *"
+          labelName="Campaign Image"
           placeholder="Place image URL of your campaign"
           inputType="url"
           value={form.image}
           handleChange={(e) => handleFormFieldChange('image', e)}
         />
         <div className="flex justify-center items-center mt-[30px]">
-          <CustomButton btnType="submit" title="Submit new Campaign" styles=" bg-[#3c80da] " />
+          <CustomButton btnType="submit" title="Submit new Campaign" />
         </div>
       </form>
     </div>

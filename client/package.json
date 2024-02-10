@@ -11,6 +11,7 @@
     "@thirdweb-dev/react": "^4",
     "@thirdweb-dev/sdk": "^4",
     "assert": "^2.0.0",
+    "axios": "^1.6.7",
     "browserify-zlib": "latest",
     "ethers": "^5",
     "http": "npm:http-browserify",
