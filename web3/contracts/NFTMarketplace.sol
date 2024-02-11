@@ -27,6 +27,7 @@ contract NFTMarketplace is ERC721URIStorage {
         address payable owner;
         uint256 price;
         bool isListed;
+        string tokenURI;
     }
 
     // whenever an item is created, the below event will be triggered.
@@ -76,12 +77,13 @@ contract NFTMarketplace is ERC721URIStorage {
         _mint(msg.sender, newTokenId);
         _setTokenURI(newTokenId, tokenURI);
 
-        createNFT(newTokenId, _price);
+        createNFT(newTokenId, _price, tokenURI);
 
         return newTokenId;
     }
 
-    function createNFT(uint256 tokenId, uint256 price) private {
+
+    function createNFT(uint256 tokenId, uint256 price, string memory tokenUri) private {
         require(price > 0, "Price cannot be negative.");
 
         // we push the marketItem created in the mapping defined above
@@ -90,7 +92,8 @@ contract NFTMarketplace is ERC721URIStorage {
             payable(msg.sender),
             payable(msg.sender),
             price,
-            false
+            false,
+            tokenUri
         );
 
         // After there is transfer of NFTs, we emit the event that we have created.
@@ -121,12 +124,14 @@ contract NFTMarketplace is ERC721URIStorage {
         idMarketItem[tokenId].isListed = true;
 
         // now since the item is listed, we make a new element of type MarketItem and push it in the itemsListed array
+        string memory tokenUri = tokenURI(tokenId);
         MarketItem memory newItem = MarketItem(
             tokenId,
             payable(msg.sender),
             payable(address(this)),
             updatedPrice,
-            true
+            true,
+            tokenUri
         );
         itemsListed.push(newItem);
 

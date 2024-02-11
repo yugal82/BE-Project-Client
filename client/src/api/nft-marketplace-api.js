@@ -1,10 +1,10 @@
 // here all the functions related to functionality such as posting data to IPFS, minting NFTs, listing NFTs for sale, buying NFTs, etc will be defined and exported here.
 
 import axios from 'axios';
+import { getNFTMarketplaceContractObject } from '../utils/contract';
 const pinata_jwt = `Bearer ${process.env.REACT_APP_PINATA_JWT}`;
 
 export const uploadImgToIPFS = async (image) => {
-  console.log(process.env.REACT_APP_PINATA_JWT);
   const pinataUrl = 'https://api.pinata.cloud/pinning/pinFileToIPFS';
   const data = new FormData();
   data.append('file', image);
@@ -35,6 +35,18 @@ export const uploadJsonMetadataToIPFS = async (jsonData) => {
       },
     });
     return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const createToken = async (uri, price) => {
+  let tokenURI = `https://ipfs.io/ipfs/${uri.IpfsHash}`;
+  console.log(tokenURI);
+  try {
+    const contract = getNFTMarketplaceContractObject();
+    const mintedToken = await contract.mintNFT(price, tokenURI);
+    return mintedToken;
   } catch (error) {
     console.log(error);
   }
