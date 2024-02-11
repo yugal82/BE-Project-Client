@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useAddress } from '@thirdweb-dev/react';
 import ConnectWalletPopup from '../../common/popup/ConnectWalletPopup';
 import Footer from '../../common/Footer/Footer';
 import NFTNavbar from '../nft-home/NFTNavbar';
 import NFTProfileTabs from './NFTProfileTabs';
-import { useState } from 'react';
+import NFTCard from '../../common/NFTCard';
 
 const NFTProfile = () => {
   const address = useAddress();
@@ -34,14 +34,26 @@ const NFTProfile = () => {
           />
         </div>
       </div>
-      <div className="w-full px-8 text-white">
+      <div className="w-full -mt-10 px-8 pb-8 text-white">
         <NFTProfileTabs categories={['Created', 'Listed']} getSelectedTabIndex={getSelectedTabIndex} />
         <div className="w-full">
           {tabIndex === 0 ? (
             // display created/minted NFTs
-            <div className="text-white">Created NFTs</div>
+            <div className="">
+              <div className="w-full grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6 mt-10">
+                {[1, 2, 3, 4, 5, 6].map((number) => (
+                  <NFTCard key={number} number={number} />
+                ))}
+              </div>
+            </div>
           ) : (
-            <div className="text-white">Listed NFTs</div>
+            <div className="">
+              <div className="w-full grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6 mt-10">
+                {[1, 2].map((number) => (
+                  <NFTCard key={number} number={number} />
+                ))}
+              </div>
+            </div>
           )}
         </div>
       </div>
