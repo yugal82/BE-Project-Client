@@ -7,17 +7,13 @@ import PropertiesComponent from './PropertiesComponent';
 import { FaX } from 'react-icons/fa6';
 import { useAddress } from '@thirdweb-dev/react';
 import ConnectWalletPopup from '../../common/popup/ConnectWalletPopup';
+import { uploadImgToIPFS, uploadJsonMetadataToIPFS } from '../../../api/nft-marketplace-api';
 
 const NFTCreate = () => {
   const address = useAddress();
 
   // states
-  const [formData, setFormData] = useState({
-    itemName: '',
-    externalLink: '',
-    description: '',
-  });
-  const [imgFile, setImgFile] = useState();
+  const [imgFile, setImgFile] = useState(null);
   const [itemNameError, setItemNameError] = useState(false);
   const [descError, setDescError] = useState(false);
   const [imgFileError, setImgFileError] = useState(false);
@@ -35,7 +31,7 @@ const NFTCreate = () => {
   const descriptionRef = useRef('');
 
   // form submission handling
-  const handleFormSubmit = (e) => {
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
 
     // check form validation
@@ -45,12 +41,30 @@ const NFTCreate = () => {
 
     // if all input filled, then create a new NFT.
     if (isValidDesc(descriptionRef.current.value) && isValidItemName(itemNameRef.current.value) && imgFile) {
-      // set form data
-      setFormData({
-        itemName: itemNameRef.current.value,
-        externalLink: externalLinkRef.current.value,
-        description: descriptionRef.current.value,
-      });
+      // if all fields filled properly, then follow below steps:
+      // 1. Upload image file to IPFS
+      // 2. Upload NFT Metadata to IPFS with image URI received from step 1.
+      // 3. Call contract function to mint NFT
+
+      // function call to upload the image to IPFS.
+      const imageIPFS = await uploadImgToIPFS(imgFile);
+
+      // upload metadata with image URI to IPFS.
+      let uri;
+      if (imageIPFS.IpfsHash) {
+        const nftMetadataJson = {
+          itemName: itemNameRef.current.value,
+          externalLink: externalLinkRef.current.value,
+          description: descriptionRef.current.value,
+          attributes: properties,
+          image: `https://ipfs.io/ipfs/${imageIPFS?.IpfsHash}`,
+        };
+
+        uri = await uploadJsonMetadataToIPFS(nftMetadataJson);
+      } else {
+        alert('Error while uploading image to IPFS');
+        // change this error message and alert to a popup for better user experience.
+      }
 
       resetForm();
     }
@@ -95,9 +109,9 @@ const NFTCreate = () => {
       alert('Atleast one property');
       return;
     }
-    const currentTrais = [...properties];
-    currentTrais.pop();
-    setProperties(currentTrais);
+    const currentTraits = [...properties];
+    currentTraits.pop();
+    setProperties(currentTraits);
   };
 
   const handlePropertyChange = (e, index) => {
