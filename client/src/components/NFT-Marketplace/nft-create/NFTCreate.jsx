@@ -7,7 +7,7 @@ import PropertiesComponent from './PropertiesComponent';
 import { FaX } from 'react-icons/fa6';
 import { useAddress } from '@thirdweb-dev/react';
 import ConnectWalletPopup from '../../common/popup/ConnectWalletPopup';
-import { uploadImgToIPFS, uploadJsonMetadataToIPFS } from '../../../api/nft-marketplace-api';
+import { createToken, uploadImgToIPFS, uploadJsonMetadataToIPFS } from '../../../api/nft-marketplace-api';
 
 const NFTCreate = () => {
   const address = useAddress();
@@ -29,6 +29,7 @@ const NFTCreate = () => {
   const itemNameRef = useRef('');
   const externalLinkRef = useRef('');
   const descriptionRef = useRef('');
+  const priceRef = useRef();
 
   // form submission handling
   const handleFormSubmit = async (e) => {
@@ -66,6 +67,9 @@ const NFTCreate = () => {
         // change this error message and alert to a popup for better user experience.
       }
 
+      // now mint NFT using smart contract function.
+      // const res = await createToken(uri, priceRef.current.value);
+      // console.log(res);
       resetForm();
     }
   };
@@ -192,7 +196,7 @@ const NFTCreate = () => {
               </span>
             )}
           </div>
-          <div className="w-full py-4 grid grid-cols-2 gap-x-4 mt-6">
+          <div className="w-full py-4 grid grid-cols-1 md:grid-cols-3 gap-x-4 mt-6">
             <div className="">
               <label className="text-white" htmlFor="item-name">
                 Item Name <span className="text-red-700">*</span>
@@ -212,7 +216,7 @@ const NFTCreate = () => {
                 </span>
               )}
             </div>
-            <div className="">
+            <div className="mt-3 sm:mt-0">
               <label className="text-white" htmlFor="external-link">
                 External Link
               </label>
@@ -223,6 +227,20 @@ const NFTCreate = () => {
                   type="text"
                   name="external-link"
                   placeholder="External Link"
+                />
+              </div>
+            </div>
+            <div className="mt-3 sm:mt-0">
+              <label className="text-white" htmlFor="external-link">
+                Price <span className="text-red-700">*</span>
+              </label>
+              <div className="w-full">
+                <input
+                  ref={priceRef}
+                  className="w-full p-2 mt-2 bg-transparent outline-none text-white border border-gray-300 rounded-lg"
+                  type="number"
+                  name="price"
+                  placeholder="Price"
                 />
               </div>
             </div>
