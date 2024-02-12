@@ -4,7 +4,7 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
 }
 
-const NFTProfileTabs = ({ categories, getSelectedTabIndex }) => {
+const ProfileTabs = ({ categories, getSelectedTabIndex }) => {
   return (
     <div className="w-full max-w-md px-2 sm:px-0">
       <Tab.Group>
@@ -32,4 +32,4 @@ const NFTProfileTabs = ({ categories, getSelectedTabIndex }) => {
   );
 };
 
-export default NFTProfileTabs;
+export default ProfileTabs;
