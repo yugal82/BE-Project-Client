@@ -1,25 +1,28 @@
-import React from "react";
-import { createRoot } from "react-dom/client";
-import App from "./App";
-import reportWebVitals from "./reportWebVitals";
-import { ThirdwebProvider } from "@thirdweb-dev/react";
-import { BrowserRouter } from "react-router-dom";
+import React from 'react';
+import { Sepolia } from '@thirdweb-dev/chains';
+import { ThirdwebSDK } from '@thirdweb-dev/sdk';
+import { createRoot } from 'react-dom/client';
+import App from './App';
+import reportWebVitals from './reportWebVitals';
+import { ChainId, ThirdwebProvider } from '@thirdweb-dev/react';
+import { BrowserRouter } from 'react-router-dom';
+
+import { StateContextProvider } from './context';
 
 // This is the chain your dApp will work on.
 // Change this to the chain your app is built for.
 // You can also import additional chains from `@thirdweb-dev/chains` and pass them directly.
-const activeChain = "ethereum";
+const activeChain = 'ethereum';
 
-const container = document.getElementById("root");
+const container = document.getElementById('root');
 const root = createRoot(container);
 root.render(
   <React.StrictMode>
-    <ThirdwebProvider
-      activeChain={activeChain}
-      clientId={process.env.REACT_APP_THIRDWEB_CLIENT_ID}
-    >
+    <ThirdwebProvider activeChain={Sepolia} clientId="a8385e2138170dc7bacf0e8d7873132e">
       <BrowserRouter>
-        <App />
+        <StateContextProvider>
+          <App />
+        </StateContextProvider>
       </BrowserRouter>
     </ThirdwebProvider>
   </React.StrictMode>
