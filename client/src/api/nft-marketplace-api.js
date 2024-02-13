@@ -40,14 +40,26 @@ export const uploadJsonMetadataToIPFS = async (jsonData) => {
   }
 };
 
-export const createToken = async (uri, price) => {
+export const createToken = async (uri, price, walletAddress) => {
   let tokenURI = `https://ipfs.io/ipfs/${uri.IpfsHash}`;
-  console.log(tokenURI);
   try {
-    const contract = getNFTMarketplaceContractObject();
+    const contract = getNFTMarketplaceContractObject(walletAddress);
     const mintedToken = await contract.mintNFT(price, tokenURI);
-    return mintedToken;
+    return {
+      mintedToken,
+      status: 'success',
+      message: 'Token created successfully',
+      code: 200,
+    };
   } catch (error) {
-    console.log(error);
+    if (error.code === 'ACTION_REJECTED') {
+      return {
+        status: 'failure',
+        message: 'User denied transaction',
+        code: 4001,
+      };
+    } else {
+      console.log('something went wrong');
+    }
   }
 };

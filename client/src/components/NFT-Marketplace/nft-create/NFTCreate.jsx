@@ -1,13 +1,14 @@
 import React, { useRef, useState } from 'react';
 import NFTNavbar from '../nft-home/NFTNavbar';
 import Footer from '../../common/Footer/Footer';
+import PropertiesComponent from './PropertiesComponent';
+import ConnectWalletPopup from '../../common/popup/ConnectWalletPopup';
 import { GrAdd } from 'react-icons/gr';
 import { HiOutlineMinus } from 'react-icons/hi';
-import PropertiesComponent from './PropertiesComponent';
 import { FaX } from 'react-icons/fa6';
 import { useAddress } from '@thirdweb-dev/react';
-import ConnectWalletPopup from '../../common/popup/ConnectWalletPopup';
 import { createToken, uploadImgToIPFS, uploadJsonMetadataToIPFS } from '../../../api/nft-marketplace-api';
+import LoadingAnimation from '../../common/LoadingAnimation';
 
 const NFTCreate = () => {
   const address = useAddress();
@@ -17,6 +18,7 @@ const NFTCreate = () => {
   const [itemNameError, setItemNameError] = useState(false);
   const [descError, setDescError] = useState(false);
   const [imgFileError, setImgFileError] = useState(false);
+  const [priceError, setPriceError] = useState(false);
   const [preview, setPreview] = useState(false);
   const [properties, setProperties] = useState([
     {
@@ -24,6 +26,7 @@ const NFTCreate = () => {
       value: '',
     },
   ]);
+  const [isLoading, setIsLoading] = useState(false);
 
   // refs
   const itemNameRef = useRef('');
@@ -39,20 +42,18 @@ const NFTCreate = () => {
     if (!isValidItemName(itemNameRef.current.value)) setItemNameError(true);
     if (!isValidDesc(descriptionRef.current.value)) setDescError(true);
     if (!imgFile) setImgFileError(true);
+    if (!priceRef.current.value) setPriceError(true);
 
     // if all input filled, then create a new NFT.
     if (isValidDesc(descriptionRef.current.value) && isValidItemName(itemNameRef.current.value) && imgFile) {
-      // if all fields filled properly, then follow below steps:
-      // 1. Upload image file to IPFS
-      // 2. Upload NFT Metadata to IPFS with image URI received from step 1.
-      // 3. Call contract function to mint NFT
+      setIsLoading(true);
 
       // function call to upload the image to IPFS.
       const imageIPFS = await uploadImgToIPFS(imgFile);
 
       // upload metadata with image URI to IPFS.
       let uri;
-      if (imageIPFS.IpfsHash) {
+      if (imageIPFS?.IpfsHash) {
         const nftMetadataJson = {
           itemName: itemNameRef.current.value,
           externalLink: externalLinkRef.current.value,
@@ -63,13 +64,20 @@ const NFTCreate = () => {
 
         uri = await uploadJsonMetadataToIPFS(nftMetadataJson);
       } else {
+        setIsLoading(false);
         alert('Error while uploading image to IPFS');
         // change this error message and alert to a popup for better user experience.
       }
 
       // now mint NFT using smart contract function.
-      // const res = await createToken(uri, priceRef.current.value);
-      // console.log(res);
+      const res = await createToken(uri, priceRef.current.value, address);
+      console.log(res);
+      if (res?.status == 'success') {
+        setIsLoading(false);
+      } else {
+        setIsLoading(false);
+        if (res?.code === 4001) alert('User denied transaction');
+      }
       resetForm();
     }
   };
@@ -88,12 +96,14 @@ const NFTCreate = () => {
     setItemNameError(false);
     setDescError(false);
     setImgFileError(false);
+    setPriceError(false);
     setPreview(false);
 
     // reset the values after the form is submitted.
     itemNameRef.current.value = '';
     descriptionRef.current.value = '';
     externalLinkRef.current.value = '';
+    priceRef.current.value = '';
 
     // reset the properties
     setProperties([{ trait: '', value: '' }]);
@@ -118,7 +128,7 @@ const NFTCreate = () => {
     setProperties(currentTraits);
   };
 
-  const handlePropertyChange = (e, index) => {
+  const onPropertyChange = (e, index) => {
     const currentProperties = [...properties];
     currentProperties[index][e.target.name] = e.target.value;
     setProperties(currentProperties);
@@ -135,12 +145,15 @@ const NFTCreate = () => {
         </span>
       </div>
       <div className="pt-4 pb-12 px-8">
+        {isLoading && <LoadingAnimation />}
         <form onSubmit={(e) => handleFormSubmit(e)} className="w-full">
           <div>
             <span className="text-white">
               Upload media <span className="text-red-700">*</span>
             </span>
-            <div className="relative p-4 mt-2 flex items-center justify-center text-white border-2 border-gray-300 border-dashed rounded-lg">
+            <div
+              className={`relative p-4 mt-2 flex items-center justify-center text-white border-2 border-gray-300 border-dashed rounded-lg`}
+            >
               {preview && (
                 <div className="absolute top-2 right-2 cursor-pointer">
                   <FaX
@@ -181,12 +194,12 @@ const NFTCreate = () => {
                     </label>
                     <p className="pl-1">&nbsp;or drag and drop</p>
                   </div>
-                  <small className="text-gray-300">Supported file types - PNG, JPG, MP3, MP4.</small>
+                  <small className="text-gray-300">Supported file types - PNG, JPG.</small>
                 </div>
               )}
               {preview && (
-                <div className="w-full p-2">
-                  <img className="w-full rounded-lg" src={URL.createObjectURL(imgFile)} alt="" />
+                <div className="p-2">
+                  <img className=" max-h-64 rounded-lg" src={URL.createObjectURL(imgFile)} alt="" />
                 </div>
               )}
             </div>
@@ -232,7 +245,7 @@ const NFTCreate = () => {
             </div>
             <div className="mt-3 sm:mt-0">
               <label className="text-white" htmlFor="external-link">
-                Price <span className="text-red-700">*</span>
+                Price <small className="text-gray-400">(in ETH)</small> <span className="text-red-700">*</span>
               </label>
               <div className="w-full">
                 <input
@@ -243,6 +256,11 @@ const NFTCreate = () => {
                   placeholder="Price"
                 />
               </div>
+              {priceError && (
+                <span className="text-red-700 font-semibold text-xs">
+                  Please fill this input field before submitting the form
+                </span>
+              )}
             </div>
           </div>
           <div className="w-full mt-6">
@@ -271,12 +289,7 @@ const NFTCreate = () => {
             <span className="text-white block">Properties</span>
             <small className="text-gray-500 block">Traits you can use to Describe your NFT</small>
             {properties?.map((property, index) => (
-              <PropertiesComponent
-                property={property}
-                index={index}
-                key={index}
-                handlePropertyChange={handlePropertyChange}
-              />
+              <PropertiesComponent property={property} index={index} key={index} onPropertyChange={onPropertyChange} />
             ))}
 
             <div className="flex items-center mt-4">
