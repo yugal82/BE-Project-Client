@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { useAddress } from '@thirdweb-dev/react';
-import ConnectWalletPopup from '../../common/popup/ConnectWalletPopup';
-import Footer from '../../common/Footer/Footer';
-import NFTNavbar from '../nft-home/NFTNavbar';
-import NFTProfileTabs from './NFTProfileTabs';
-import NFTCard from '../../common/NFTCard';
+import ConnectWalletPopup from '../../components/common/popup/ConnectWalletPopup';
+import Footer from '../../components/common/Footer/Footer';
+import Navbar from '../../components/Home/Navbar/Navbar';
+import ProfileTabs from './ProfileTabs';
+import NFTCard from '../../components/common/NFTCard';
 
-const NFTProfile = () => {
+const Profile = () => {
   const address = useAddress();
   const [tabIndex, setTabIndex] = useState(0);
 
@@ -14,7 +14,7 @@ const NFTProfile = () => {
 
   return (
     <div className="relative">
-      <NFTNavbar />
+      <Navbar />
       {!address && <ConnectWalletPopup />}
       <div className="banner-and-small-logo relative -top-28">
         {/* banner logo */}
@@ -35,7 +35,10 @@ const NFTProfile = () => {
         </div>
       </div>
       <div className="w-full -mt-10 px-8 pb-8 text-white">
-        <NFTProfileTabs categories={['Created', 'Listed']} getSelectedTabIndex={getSelectedTabIndex} />
+        <ProfileTabs
+          categories={['Created', 'Listed', 'Crowdfunding Campaigns']}
+          getSelectedTabIndex={getSelectedTabIndex}
+        />
         <div className="w-full">
           {tabIndex === 0 ? (
             // display created/minted NFTs
@@ -46,7 +49,7 @@ const NFTProfile = () => {
                 ))}
               </div>
             </div>
-          ) : (
+          ) : tabIndex === 1 ? (
             <div className="">
               <div className="w-full grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6 mt-10">
                 {[1, 2].map((number) => (
@@ -54,6 +57,8 @@ const NFTProfile = () => {
                 ))}
               </div>
             </div>
+          ) : (
+            <div>Crowdfunding Campaigns</div>
           )}
         </div>
       </div>
@@ -62,4 +67,4 @@ const NFTProfile = () => {
   );
 };
 
-export default NFTProfile;
+export default Profile;
