@@ -3,12 +3,15 @@ import NFTNavbar from '../nft-home/NFTNavbar';
 import Footer from '../../common/Footer/Footer';
 import PropertiesComponent from './PropertiesComponent';
 import ConnectWalletPopup from '../../common/popup/ConnectWalletPopup';
+import ImageUploader from './ImageUploader';
+import InvalidValueField from './InvalidValueField';
+import InputField from './InputField';
+import InputLabel from './InputLabel';
+import LoadingAnimation from '../../common/LoadingAnimation';
 import { GrAdd } from 'react-icons/gr';
 import { HiOutlineMinus } from 'react-icons/hi';
-import { FaX } from 'react-icons/fa6';
 import { useAddress } from '@thirdweb-dev/react';
 import { createToken, uploadImgToIPFS, uploadJsonMetadataToIPFS } from '../../../api/nft-marketplace-api';
-import LoadingAnimation from '../../common/LoadingAnimation';
 
 const NFTCreate = () => {
   const address = useAddress();
@@ -54,15 +57,7 @@ const NFTCreate = () => {
       // upload metadata with image URI to IPFS.
       let uri;
       if (imageIPFS?.IpfsHash) {
-        const nftMetadataJson = {
-          itemName: itemNameRef.current.value,
-          externalLink: externalLinkRef.current.value,
-          description: descriptionRef.current.value,
-          attributes: properties,
-          image: `https://ipfs.io/ipfs/${imageIPFS?.IpfsHash}`,
-        };
-
-        uri = await uploadJsonMetadataToIPFS(nftMetadataJson);
+        uri = await uploadJsonMetadataToIPFS(itemNameRef, externalLinkRef, descriptionRef, properties, imageIPFS);
       } else {
         setIsLoading(false);
         alert('Error while uploading image to IPFS');
@@ -147,126 +142,48 @@ const NFTCreate = () => {
       <div className="pt-4 pb-12 px-8">
         {isLoading && <LoadingAnimation />}
         <form onSubmit={(e) => handleFormSubmit(e)} className="w-full">
-          <div>
-            <span className="text-white">
-              Upload media <span className="text-red-700">*</span>
-            </span>
-            <div
-              className={`relative p-4 mt-2 flex items-center justify-center text-white border-2 border-gray-300 border-dashed rounded-lg`}
-            >
-              {preview && (
-                <div className="absolute top-2 right-2 cursor-pointer">
-                  <FaX
-                    onClick={() => {
-                      setImgFile();
-                      setPreview(false);
-                    }}
-                  />
-                </div>
-              )}
-              {!preview && (
-                <div className="space-y-1 text-center">
-                  <svg
-                    className="mx-auto h-12 w-12"
-                    stroke="currentColor"
-                    fill="none"
-                    viewBox="0 0 48 48"
-                    aria-hidden="true"
-                  >
-                    <path
-                      d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
-                      strokeWidth={2}
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                  <div className="flex items-center justify-center text-base">
-                    <label htmlFor="file-upload" className="cursor-pointer rounded-md font-medium">
-                      <span className="">Upload a file</span>
-                      <input
-                        onChange={(e) => handleFileChange(e)}
-                        id="file-upload"
-                        name="fileUpload"
-                        type="file"
-                        accept="image/*"
-                        className="sr-only"
-                      />
-                    </label>
-                    <p className="pl-1">&nbsp;or drag and drop</p>
-                  </div>
-                  <small className="text-gray-300">Supported file types - PNG, JPG.</small>
-                </div>
-              )}
-              {preview && (
-                <div className="p-2">
-                  <img className=" max-h-64 rounded-lg" src={URL.createObjectURL(imgFile)} alt="" />
-                </div>
-              )}
-            </div>
-            {imgFileError && (
-              <span className="text-red-700 font-semibold text-xs">
-                Please fill this input field before submitting the form
-              </span>
-            )}
-          </div>
+          <ImageUploader
+            preview={preview}
+            setPreview={setPreview}
+            imgFile={imgFile}
+            setImgFile={setImgFile}
+            handleFileChange={handleFileChange}
+            imgFileError={imgFileError}
+          />
           <div className="w-full py-4 grid grid-cols-1 md:grid-cols-3 gap-x-4 mt-6">
             <div className="">
-              <label className="text-white" htmlFor="item-name">
-                Item Name <span className="text-red-700">*</span>
-              </label>
+              <InputLabel htmlFor={'item-name'} title={'Item Name'} isRequired={true} />
               <div className="w-full">
-                <input
-                  ref={itemNameRef}
-                  className="w-full p-2 mt-2 bg-transparent outline-none text-white border border-gray-300 rounded-lg"
-                  type="text"
-                  name="item-name"
-                  placeholder="Enter name of the NFT"
+                <InputField
+                  reference={itemNameRef}
+                  type={'text'}
+                  name={'item-name'}
+                  placeholder={'Enter name of the NFT'}
                 />
               </div>
-              {itemNameError && (
-                <span className="text-red-700 font-semibold text-xs">
-                  Please fill this input field before submitting the form
-                </span>
-              )}
+              {itemNameError && <InvalidValueField />}
             </div>
             <div className="mt-3 sm:mt-0">
-              <label className="text-white" htmlFor="external-link">
-                External Link
-              </label>
+              <InputLabel htmlFor={'external-link'} title={'External Link'} isRequired={false} />
               <div className="w-full">
-                <input
-                  ref={externalLinkRef}
-                  className="w-full p-2 mt-2 bg-transparent outline-none text-white border border-gray-300 rounded-lg"
-                  type="text"
-                  name="external-link"
-                  placeholder="External Link"
+                <InputField
+                  reference={externalLinkRef}
+                  type={'text'}
+                  name={'external-link'}
+                  placeholder={'External Link'}
                 />
               </div>
             </div>
             <div className="mt-3 sm:mt-0">
-              <label className="text-white" htmlFor="external-link">
-                Price <small className="text-gray-400">(in ETH)</small> <span className="text-red-700">*</span>
-              </label>
+              <InputLabel htmlFor={'price'} title={'Price'} isRequired={true} />
               <div className="w-full">
-                <input
-                  ref={priceRef}
-                  className="w-full p-2 mt-2 bg-transparent outline-none text-white border border-gray-300 rounded-lg"
-                  type="number"
-                  name="price"
-                  placeholder="Price"
-                />
+                <InputField reference={priceRef} type={'number'} name={'price'} placeholder={'Price'} />
               </div>
-              {priceError && (
-                <span className="text-red-700 font-semibold text-xs">
-                  Please fill this input field before submitting the form
-                </span>
-              )}
+              {priceError && <InvalidValueField />}
             </div>
           </div>
           <div className="w-full mt-6">
-            <label className="text-white" htmlFor="description">
-              Description <span className="text-red-700">*</span>
-            </label>
+            <InputLabel htmlFor={'description'} title={'Description'} isRequired={true} />
             <p className="text-sm text-gray-500">
               The description will be included on the items detail page underneath its image. Markdown syntax is
               supported.
@@ -279,11 +196,7 @@ const NFTCreate = () => {
               rows={5}
               placeholder="Description"
             ></textarea>
-            {descError && (
-              <span className="text-red-700 font-semibold text-xs">
-                Please fill this input field before submitting the form
-              </span>
-            )}
+            {descError && <InvalidValueField />}
           </div>
           <div className="mt-6">
             <span className="text-white block">Properties</span>

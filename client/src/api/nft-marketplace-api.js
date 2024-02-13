@@ -19,13 +19,21 @@ export const uploadImgToIPFS = async (image) => {
     });
     return res.data;
   } catch (error) {
-    console.log(error);
+    alert(error);
   }
 };
 
-export const uploadJsonMetadataToIPFS = async (jsonData) => {
+export const uploadJsonMetadataToIPFS = async (itemNameRef, externalLinkRef, descriptionRef, properties, imageIPFS) => {
+  const nftMetadataJson = {
+    itemName: itemNameRef.current.value,
+    externalLink: externalLinkRef.current.value,
+    description: descriptionRef.current.value,
+    attributes: properties,
+    image: `https://ipfs.io/ipfs/${imageIPFS?.IpfsHash}`,
+  };
+
   const url = 'https://api.pinata.cloud/pinning/pinJSONToIPFS';
-  const metadata = JSON.stringify(jsonData);
+  const metadata = JSON.stringify(nftMetadataJson);
 
   try {
     const response = await axios.post(url, metadata, {
@@ -36,7 +44,7 @@ export const uploadJsonMetadataToIPFS = async (jsonData) => {
     });
     return response.data;
   } catch (error) {
-    console.log(error);
+    alert(error);
   }
 };
 
