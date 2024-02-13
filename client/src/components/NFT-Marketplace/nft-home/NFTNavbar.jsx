@@ -36,13 +36,13 @@ const NFTNavbar = () => {
                     Explore NFTs
                   </li>
                 </Link>
-                <Link to="/nft-marketplace/profile">
-                  <li className="w-full text-3xl font-semibold cursor-pointer py-6 border-b border-white">Profile</li>
-                </Link>
                 <Link to="/nft-marketplace/create">
                   <li className="w-full text-3xl font-semibold cursor-pointer py-6 border-b border-white">
                     Create NFTs
                   </li>
+                </Link>
+                <Link to="/profile">
+                  <li className="w-full text-3xl font-semibold cursor-pointer py-6 border-b border-white">Profile</li>
                 </Link>
               </ul>
             </div>
@@ -59,14 +59,14 @@ const NFTNavbar = () => {
                   Explore NFTs
                 </li>
               </Link>
-              <Link to="/nft-marketplace/profile">
-                <li className="text-base py-4 px-2 font-semibold cursor-pointer hover:scale-110 transition-all ease-in-out duration-200">
-                  Profile
-                </li>
-              </Link>
               <Link to="/nft-marketplace/create">
                 <li className="text-base py-4 px-2 font-semibold cursor-pointer hover:scale-110 transition-all ease-in-out duration-200">
                   Create NFTs
+                </li>
+              </Link>
+              <Link to="/profile">
+                <li className="text-base py-4 px-2 font-semibold cursor-pointer hover:scale-110 transition-all ease-in-out duration-200">
+                  Profile
                 </li>
               </Link>
             </div>
