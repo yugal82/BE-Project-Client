@@ -32,7 +32,7 @@ const NFTService = () => {
       </div>
       <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-y-6 sm:gap-x-6 text-white mt-10">
         {nftservices.map((service) => (
-          <NFTServiceCard service={service} />
+          <NFTServiceCard key={service.step} service={service} />
         ))}
       </div>
     </div>
