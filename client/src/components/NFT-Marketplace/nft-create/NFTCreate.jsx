@@ -8,13 +8,16 @@ import InvalidValueField from './InvalidValueField';
 import InputField from './InputField';
 import InputLabel from './InputLabel';
 import LoadingAnimation from '../../common/LoadingAnimation';
+import ErrorPopup from '../../common/popup/ErrorPopup';
 import { GrAdd } from 'react-icons/gr';
 import { HiOutlineMinus } from 'react-icons/hi';
 import { useAddress } from '@thirdweb-dev/react';
 import { createToken, uploadImgToIPFS, uploadJsonMetadataToIPFS } from '../../../api/nft-marketplace-api';
+import { useNavigate } from 'react-router-dom';
 
 const NFTCreate = () => {
   const address = useAddress();
+  const navigate = useNavigate();
 
   // states
   const [imgFile, setImgFile] = useState(null);
@@ -30,6 +33,8 @@ const NFTCreate = () => {
     },
   ]);
   const [isLoading, setIsLoading] = useState(false);
+  const [txnError, setTxnError] = useState(false);
+  const [txnErrorMsg, setTxnErrorMsg] = useState('');
 
   // refs
   const itemNameRef = useRef('');
@@ -56,24 +61,39 @@ const NFTCreate = () => {
 
       // upload metadata with image URI to IPFS.
       let uri;
-      if (imageIPFS?.IpfsHash) {
-        uri = await uploadJsonMetadataToIPFS(itemNameRef, externalLinkRef, descriptionRef, properties, imageIPFS);
+      if (imageIPFS?.code === 200) {
+        uri = await uploadJsonMetadataToIPFS(
+          itemNameRef,
+          externalLinkRef,
+          descriptionRef,
+          properties,
+          imageIPFS?.imageIPFS
+        );
       } else {
         setIsLoading(false);
-        alert('Error while uploading image to IPFS');
-        // change this error message and alert to a popup for better user experience.
+        setTxnError(true);
+        setTxnErrorMsg('Error while uploading metadata to IPFS. Please try again.');
       }
 
       // now mint NFT using smart contract function.
-      const res = await createToken(uri, priceRef.current.value, address);
-      console.log(res);
-      if (res?.status == 'success') {
-        setIsLoading(false);
+      if (imageIPFS?.code === 200 && uri?.code === 200) {
+        const res = await createToken(uri?.uri, priceRef.current.value, address);
+        if (res?.status == 'success') {
+          setIsLoading(false);
+        } else {
+          setIsLoading(false);
+          if (res?.code === 4001) {
+            setTxnError(true);
+            setTxnErrorMsg('You denied transaction. Please approve the transaction in your wallet when you try again.');
+          }
+        }
       } else {
-        setIsLoading(false);
-        if (res?.code === 4001) alert('User denied transaction');
+        setTxnError(true);
+        setTxnErrorMsg('Something went wrong. Please try again');
       }
+
       resetForm();
+      navigate('/profile');
     }
   };
 
@@ -132,6 +152,7 @@ const NFTCreate = () => {
   return (
     <div className="">
       {!address && <ConnectWalletPopup />}
+      {txnError && <ErrorPopup message={txnErrorMsg} />}
       <NFTNavbar />
       <div className="w-full px-8 py-12 sm:py-16 text-white">
         <h2 className="text-3xl font-semibold">Create a new NFT</h2>

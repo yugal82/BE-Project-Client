@@ -1,11 +1,18 @@
 import { Dialog, Transition } from '@headlessui/react';
-import { Fragment } from 'react';
+import { Fragment, useState } from 'react';
+import { FaX } from 'react-icons/fa6';
 
-const LoadingAnimation = () => {
+const ErrorPopup = ({ message }) => {
+  let [isOpen, setIsOpen] = useState(true);
+
+  function closeModal() {
+    setIsOpen(false);
+  }
+
   return (
     <>
-      <Transition appear show={true} as={Fragment}>
-        <Dialog as="div" className="relative z-10" onClose={() => {}}>
+      <Transition appear show={isOpen} as={Fragment}>
+        <Dialog as="div" className="relative z-10" onClose={closeModal}>
           <Transition.Child
             as={Fragment}
             enter="ease-out duration-300"
@@ -17,7 +24,6 @@ const LoadingAnimation = () => {
           >
             <div className="fixed inset-0 bg-[#eee] bg-transparent backdrop-filter backdrop-blur-lg" />
           </Transition.Child>
-
           <div className="fixed inset-0 overflow-y-auto">
             <div className="flex min-h-full items-center justify-center p-4 text-center">
               <Transition.Child
@@ -29,12 +35,15 @@ const LoadingAnimation = () => {
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-[#111827] p-6 text-left align-middle shadow-lg shadow-gray-700 transition-all">
+                <Dialog.Panel className="relative w-[80%] sm:w-full sm:max-w-md transform overflow-hidden rounded-2xl bg-[#111827] px-8 py-10 text-left align-middle shadow-lg shadow-gray-700 transition-all">
+                  <div className="absolute right-3 top-2 text-white">
+                    <FaX className="w-3 cursor-pointer" onClick={closeModal} />
+                  </div>
                   <Dialog.Title as="h3" className="text-lg font-medium leading-6 text-white">
-                    <div className="animate-spin mx-auto w-20 h-20 rounded-full border-b-2 border-[#eee]"></div>
+                    {message}
                   </Dialog.Title>
-                  <div className="mt-4">
-                    <p className="text-center text-lg text-white">Please wait while we are creating your NFT!</p>
+                  <div className="mt-2">
+                    <p className="text-sm text-gray-500">Please try again.</p>
                   </div>
                 </Dialog.Panel>
               </Transition.Child>
@@ -46,4 +55,4 @@ const LoadingAnimation = () => {
   );
 };
 
-export default LoadingAnimation;
+export default ErrorPopup;

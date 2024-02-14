@@ -17,9 +17,18 @@ export const uploadImgToIPFS = async (image) => {
         Authorization: pinata_jwt,
       },
     });
-    return res.data;
+    return {
+      status: 'success',
+      code: 200,
+      message: 'Image uploaded successfully on IPFS',
+      imageIPFS: res.data,
+    };
   } catch (error) {
-    alert(error);
+    return {
+      status: 'failure',
+      message: 'Error while uploading image to IPFS.',
+      code: 403,
+    };
   }
 };
 
@@ -42,14 +51,23 @@ export const uploadJsonMetadataToIPFS = async (itemNameRef, externalLinkRef, des
         Authorization: pinata_jwt,
       },
     });
-    return response.data;
+    return {
+      status: 'success',
+      message: 'Metadata uploaded successfully',
+      code: 200,
+      uri: response.data,
+    };
   } catch (error) {
-    alert(error);
+    return {
+      status: 'failure',
+      message: 'Error while uploading image to IPFS.',
+      code: 403,
+    };
   }
 };
 
 export const createToken = async (uri, price, walletAddress) => {
-  let tokenURI = `https://ipfs.io/ipfs/${uri.IpfsHash}`;
+  let tokenURI = `https://ipfs.io/ipfs/${uri?.IpfsHash}`;
   try {
     const contract = getNFTMarketplaceContractObject(walletAddress);
     const mintedToken = await contract.mintNFT(price, tokenURI);
