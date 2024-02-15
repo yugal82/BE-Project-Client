@@ -17,15 +17,32 @@ export const uploadImgToIPFS = async (image) => {
         Authorization: pinata_jwt,
       },
     });
-    return res.data;
+    return {
+      status: 'success',
+      code: 200,
+      message: 'Image uploaded successfully on IPFS',
+      imageIPFS: res.data,
+    };
   } catch (error) {
-    console.log(error);
+    return {
+      status: 'failure',
+      message: 'Error while uploading image to IPFS.',
+      code: 403,
+    };
   }
 };
 
-export const uploadJsonMetadataToIPFS = async (jsonData) => {
+export const uploadJsonMetadataToIPFS = async (itemNameRef, externalLinkRef, descriptionRef, properties, imageIPFS) => {
+  const nftMetadataJson = {
+    itemName: itemNameRef.current.value,
+    externalLink: externalLinkRef.current.value,
+    description: descriptionRef.current.value,
+    attributes: properties,
+    image: `https://ipfs.io/ipfs/${imageIPFS?.IpfsHash}`,
+  };
+
   const url = 'https://api.pinata.cloud/pinning/pinJSONToIPFS';
-  const metadata = JSON.stringify(jsonData);
+  const metadata = JSON.stringify(nftMetadataJson);
 
   try {
     const response = await axios.post(url, metadata, {
@@ -34,20 +51,41 @@ export const uploadJsonMetadataToIPFS = async (jsonData) => {
         Authorization: pinata_jwt,
       },
     });
-    return response.data;
+    return {
+      status: 'success',
+      message: 'Metadata uploaded successfully',
+      code: 200,
+      uri: response.data,
+    };
   } catch (error) {
-    console.log(error);
+    return {
+      status: 'failure',
+      message: 'Error while uploading image to IPFS.',
+      code: 403,
+    };
   }
 };
 
-export const createToken = async (uri, price) => {
-  let tokenURI = `https://ipfs.io/ipfs/${uri.IpfsHash}`;
-  console.log(tokenURI);
+export const createToken = async (uri, price, walletAddress) => {
+  let tokenURI = `https://ipfs.io/ipfs/${uri?.IpfsHash}`;
   try {
-    const contract = getNFTMarketplaceContractObject();
+    const contract = getNFTMarketplaceContractObject(walletAddress);
     const mintedToken = await contract.mintNFT(price, tokenURI);
-    return mintedToken;
+    return {
+      mintedToken,
+      status: 'success',
+      message: 'Token created successfully',
+      code: 200,
+    };
   } catch (error) {
-    console.log(error);
+    if (error.code === 'ACTION_REJECTED') {
+      return {
+        status: 'failure',
+        message: 'User denied transaction',
+        code: 4001,
+      };
+    } else {
+      alert('something went wrong');
+    }
   }
 };
