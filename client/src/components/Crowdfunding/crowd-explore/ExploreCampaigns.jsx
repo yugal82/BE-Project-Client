@@ -1,6 +1,5 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Loader } from '../crowd-assets';
 
 const ExploreCampaigns = ({ title, isLoading, campaigns }) => {
   const navigate = useNavigate();
@@ -9,16 +8,18 @@ const ExploreCampaigns = ({ title, isLoading, campaigns }) => {
   };
 
   return (
-    <div className="px-10 py-6 md:px-[120px] md:py-10">
-      <h1 className=" text-white font-semibold text-[18px] ">
+    <div className="h-screen px-10 py-6 md:px-28 md:py-10">
+      <h1 className=" text-white font-semibold text-lg ">
         {title} ({campaigns.length})
       </h1>
-      <div className="flex flex-wrap mt-[20px] gap-[26px] ">
-        {isLoading && <img src={Loader} alt="loader" className="w-[100px] h-[100px] object-contain" />}
+      <div className="w-full flex flex-wrap mt-5 gap-6 ">
+        {isLoading && (
+          <div className="w-full flex items-center justify-center">
+            <div className="animate-spin flex items-center justify-center w-10 h-10 border-b-2 border-white rounded-full"></div>
+          </div>
+        )}
         {!isLoading && campaigns.length === 0 && (
-          <p className=" font-semibold text-[14px] leading-[30px] text-[#818183] ">
-            You have not created any campaigns yet
-          </p>
+          <p className=" font-semibold text-base text-[#818183] ">You have not created any campaigns yet</p>
         )}
       </div>
     </div>

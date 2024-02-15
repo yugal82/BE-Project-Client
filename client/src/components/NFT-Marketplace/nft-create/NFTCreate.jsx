@@ -157,7 +157,7 @@ const NFTCreate = () => {
   return (
     <div className="">
       {!address && <ConnectWalletPopup />}
-      {isLoading && <LoadingAnimation />}
+      {isLoading && <LoadingAnimation message={'Please wait while we are creating your NFT!'} />}
       {txnError && <ErrorPopup message={txnErrorMsg} />}
       {success && <SuccessPopup message={'Your token was minted successfully! Visit profile to view your NFT.'} />}
       <NFTNavbar />

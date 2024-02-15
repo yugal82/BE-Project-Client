@@ -1,7 +1,7 @@
 import { Dialog, Transition } from '@headlessui/react';
 import { Fragment } from 'react';
 
-const LoadingAnimation = () => {
+const LoadingAnimation = ({ message }) => {
   return (
     <>
       <Transition appear show={true} as={Fragment}>
@@ -34,7 +34,7 @@ const LoadingAnimation = () => {
                     <div className="animate-spin mx-auto w-20 h-20 rounded-full border-b-2 border-[#eee]"></div>
                   </Dialog.Title>
                   <div className="mt-4">
-                    <p className="text-center text-lg text-white">Please wait while we are creating your NFT!</p>
+                    <p className="text-center text-lg text-white">{message}</p>
                   </div>
                 </Dialog.Panel>
               </Transition.Child>
