@@ -6,6 +6,8 @@ import Navbar from '../../components/Home/Navbar/Navbar';
 import ProfileTabs from './ProfileTabs';
 import NFTCard from '../../components/common/NFTCard';
 import { useStateContext } from '../../context';
+import { FaEthereum } from 'react-icons/fa6';
+import { FiEdit2 } from 'react-icons/fi';
 
 const Profile = () => {
   const address = useAddress();
@@ -50,7 +52,30 @@ const Profile = () => {
           />
         </div>
       </div>
-      <div className="w-full -mt-10 px-8 pb-8 text-white">
+      <div className="w-full -mt-20 px-8 pb-8 text-white">
+        <div className="mb-10">
+          <div>
+            <div className="flex items-center justify-between">
+              <span className="text-2xl font-semibold">Unnamed</span>
+              <button className="bg-[#1D4ED8] rounded-full p-2">
+                <FiEdit2 />
+              </button>
+            </div>
+            <div className="flex items-center mt-2">
+              <FaEthereum />
+              {address && (
+                <p className="text-gray-500">
+                  {address.substr(0, 5).toLowerCase()}...{address.substr(-5).toLowerCase()}
+                </p>
+              )}
+            </div>
+          </div>
+          <div className="flex items-center justify-start mt-4">
+            <p className="py-1 px-2 bg-gray-600 text-white text-sm rounded-lg">Created NFTs: 8</p>
+            <p className="py-1 px-2 bg-gray-600 text-white text-sm rounded-lg mx-2">Listed NFTs: 0</p>
+            <p className="py-1 px-2 bg-gray-600 text-white text-sm rounded-lg">Created Campaigns: 0</p>
+          </div>
+        </div>
         <ProfileTabs
           categories={['Created Tokens', 'Listed Tokens', 'Created Campaigns']}
           getSelectedTabIndex={getSelectedTabIndex}
