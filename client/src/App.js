@@ -12,6 +12,7 @@ const NFTDetails = React.lazy(() => import('./components/NFT-Marketplace/nft-det
 const CrowdfundingMain = React.lazy(() => import('./components/Crowdfunding/CrowdfundingMain'));
 const CrowdCreate = React.lazy(() => import('./components/Crowdfunding/crowd-create/CrowdCreate'));
 const CrowdExplore = React.lazy(() => import('./components/Crowdfunding/crowd-explore/CrowdExplore'));
+const CampaignDetails = React.lazy(() => import('./components/Crowdfunding/crowd-components/CampaignDetails'));
 
 export default function Home() {
   return (
@@ -86,6 +87,15 @@ export default function Home() {
           element={
             <React.Suspense fallback={<SuspenseAnimation />}>
               <CrowdExplore />
+            </React.Suspense>
+          }
+        />
+        <Route
+          exact
+          path="/crowdfunding/campaign-details/:id"
+          element={
+            <React.Suspense fallback={<SuspenseAnimation />}>
+              <CampaignDetails />
             </React.Suspense>
           }
         />
