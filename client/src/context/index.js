@@ -14,6 +14,7 @@ const StateContext = createContext();
 
 export const StateContextProvider = ({ children }) => {
   const [userCreatedNfts, setUserCreatedNfts] = useState([]);
+  const [isUserNFTsFetched, setIsUserNFTsFetched] = useState(false);
 
   const { contract } = useContract('0x27Edf40a51A6726cd7ee742453ce8947EEB7A76d');
 
@@ -95,6 +96,7 @@ export const StateContextProvider = ({ children }) => {
         })
       );
       setUserCreatedNfts(mintedNfts);
+      setIsUserNFTsFetched(true);
     } catch (error) {
       alert('Error');
     }
@@ -113,6 +115,8 @@ export const StateContextProvider = ({ children }) => {
         getDonations,
         getUserNfts,
         userCreatedNfts,
+        isUserNFTsFetched,
+        setIsUserNFTsFetched,
       }}
     >
       {children}
