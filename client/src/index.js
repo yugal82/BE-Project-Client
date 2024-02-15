@@ -9,11 +9,13 @@ import { BrowserRouter } from 'react-router-dom';
 
 import { StateContextProvider } from './context';
 
+// console.log(process.env.REACT_APP_THIRDWEB_API_KEY);
+
 const container = document.getElementById('root');
 const root = createRoot(container);
 root.render(
   <React.StrictMode>
-    <ThirdwebProvider activeChain={Sepolia} clientId={process.env.REACT_APP_THIRDWEB_CLIENT_ID}>
+    <ThirdwebProvider activeChain={Sepolia} clientId={process.env.REACT_APP_THIRDWEB_API_KEY}>
       <BrowserRouter>
         <StateContextProvider>
           <App />
