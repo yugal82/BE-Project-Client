@@ -1,14 +1,30 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useAddress } from '@thirdweb-dev/react';
 import ConnectWalletPopup from '../../components/common/popup/ConnectWalletPopup';
 import Footer from '../../components/common/Footer/Footer';
 import Navbar from '../../components/Home/Navbar/Navbar';
 import ProfileTabs from './ProfileTabs';
 import NFTCard from '../../components/common/NFTCard';
+import { useStateContext } from '../../context';
 
 const Profile = () => {
   const address = useAddress();
   const [tabIndex, setTabIndex] = useState(0);
+  const [isDataFetched, setIsDataFetched] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const { getUserNfts, userCreatedNfts } = useStateContext();
+
+  const fetchUserNfts = async () => {
+    setIsLoading(true);
+    await getUserNfts();
+    setIsDataFetched(true);
+    setIsLoading(false);
+  };
+
+  useEffect(() => {
+    fetchUserNfts();
+  }, [isDataFetched]);
 
   const getSelectedTabIndex = (tabIndex) => setTabIndex(tabIndex);
 
@@ -44,8 +60,8 @@ const Profile = () => {
             // display created/minted NFTs
             <div className="">
               <div className="w-full grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6 mt-10">
-                {[1, 2, 3, 4, 5, 6].map((number) => (
-                  <NFTCard key={number} number={number} />
+                {userCreatedNfts?.map((nft) => (
+                  <NFTCard key={nft?.tokenId} nft={nft} />
                 ))}
               </div>
             </div>

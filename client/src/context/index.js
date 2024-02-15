@@ -1,9 +1,11 @@
-import { React, useContext, createContext, useMemo } from 'react';
+import { React, useContext, createContext, useMemo, useState } from 'react';
 
 import { useAddress, useContract, useMetamask, useContractWrite, useMetadata } from '@thirdweb-dev/react';
 import { ethers } from 'ethers';
 
 import { EditionMetadataWithOwnerOutputSchema } from '@thirdweb-dev/sdk';
+import { getNFTMarketplaceContractObject } from '../utils/contract';
+import { fetchDataOfItemFromIPFS } from '../api/nft-marketplace-api';
 
 // const address = useAddress();
 // const connect = useMetamask();
@@ -11,6 +13,8 @@ import { EditionMetadataWithOwnerOutputSchema } from '@thirdweb-dev/sdk';
 const StateContext = createContext();
 
 export const StateContextProvider = ({ children }) => {
+  const [userCreatedNfts, setUserCreatedNfts] = useState([]);
+
   const { contract } = useContract('0x27Edf40a51A6726cd7ee742453ce8947EEB7A76d');
 
   const { mutateAsync: createCampaign } = useContractWrite(contract, 'createCampaign');
@@ -80,6 +84,22 @@ export const StateContextProvider = ({ children }) => {
     return parsedDonations;
   };
 
+  const getUserNfts = async () => {
+    try {
+      const marketplaceContract = getNFTMarketplaceContractObject(address);
+      const userNfts = await marketplaceContract.fetchUserNFTs();
+      const mintedNfts = await Promise.all(
+        userNfts.map(async (nft) => {
+          const metadata = await fetchDataOfItemFromIPFS(nft);
+          return metadata;
+        })
+      );
+      setUserCreatedNfts(mintedNfts);
+    } catch (error) {
+      alert('Error');
+    }
+  };
+
   return (
     <StateContext.Provider
       value={{
@@ -91,6 +111,8 @@ export const StateContextProvider = ({ children }) => {
         getUserCampaigns,
         donate,
         getDonations,
+        getUserNfts,
+        userCreatedNfts,
       }}
     >
       {children}
