@@ -85,7 +85,7 @@ export const createToken = async (uri, price, walletAddress) => {
         code: 4001,
       };
     } else {
-      console.log('something went wrong');
+      alert('something went wrong');
     }
   }
 };

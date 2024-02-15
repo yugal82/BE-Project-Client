@@ -36,7 +36,7 @@ const Profile = () => {
       </div>
       <div className="w-full -mt-10 px-8 pb-8 text-white">
         <ProfileTabs
-          categories={['Created', 'Listed', 'Crowdfunding Campaigns']}
+          categories={['Created Tokens', 'Listed Tokens', 'Created Campaigns']}
           getSelectedTabIndex={getSelectedTabIndex}
         />
         <div className="w-full">

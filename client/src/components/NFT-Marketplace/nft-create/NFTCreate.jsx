@@ -9,6 +9,7 @@ import InputField from './InputField';
 import InputLabel from './InputLabel';
 import LoadingAnimation from '../../common/LoadingAnimation';
 import ErrorPopup from '../../common/popup/ErrorPopup';
+import SuccessPopup from '../../common/popup/SuccessPopup';
 import { GrAdd } from 'react-icons/gr';
 import { HiOutlineMinus } from 'react-icons/hi';
 import { useAddress } from '@thirdweb-dev/react';
@@ -35,6 +36,7 @@ const NFTCreate = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [txnError, setTxnError] = useState(false);
   const [txnErrorMsg, setTxnErrorMsg] = useState('');
+  const [success, setSuccess] = useState(false);
 
   // refs
   const itemNameRef = useRef('');
@@ -78,8 +80,9 @@ const NFTCreate = () => {
       // now mint NFT using smart contract function.
       if (imageIPFS?.code === 200 && uri?.code === 200) {
         const res = await createToken(uri?.uri, priceRef.current.value, address);
-        if (res?.status == 'success') {
+        if (res?.status === 'success') {
           setIsLoading(false);
+          setSuccess(true);
         } else {
           setIsLoading(false);
           if (res?.code === 4001) {
@@ -93,7 +96,9 @@ const NFTCreate = () => {
       }
 
       resetForm();
-      navigate('/profile');
+      setTimeout(() => {
+        navigate('/profile');
+      }, 3000);
     }
   };
 
@@ -152,7 +157,9 @@ const NFTCreate = () => {
   return (
     <div className="">
       {!address && <ConnectWalletPopup />}
+      {isLoading && <LoadingAnimation />}
       {txnError && <ErrorPopup message={txnErrorMsg} />}
+      {success && <SuccessPopup message={'Your token was minted successfully! Visit profile to view your NFT.'} />}
       <NFTNavbar />
       <div className="w-full px-8 py-12 sm:py-16 text-white">
         <h2 className="text-3xl font-semibold">Create a new NFT</h2>
@@ -161,7 +168,6 @@ const NFTCreate = () => {
         </span>
       </div>
       <div className="pt-4 pb-12 px-8">
-        {isLoading && <LoadingAnimation />}
         <form onSubmit={(e) => handleFormSubmit(e)} className="w-full">
           <ImageUploader
             preview={preview}
