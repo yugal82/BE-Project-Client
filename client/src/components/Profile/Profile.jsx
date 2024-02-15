@@ -8,12 +8,13 @@ import NFTCard from '../../components/common/NFTCard';
 import { useStateContext } from '../../context';
 import { FaEthereum } from 'react-icons/fa6';
 import { FiEdit2 } from 'react-icons/fi';
+import { Skeleton } from '../common/Skeleton';
 
 const Profile = () => {
   const address = useAddress();
   const [tabIndex, setTabIndex] = useState(0);
   const [isDataFetched, setIsDataFetched] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const { getUserNfts, userCreatedNfts } = useStateContext();
 
@@ -71,7 +72,9 @@ const Profile = () => {
             </div>
           </div>
           <div className="flex items-center justify-start mt-4">
-            <p className="py-1 px-2 bg-gray-600 text-white text-sm rounded-lg">Created NFTs: 8</p>
+            <p className="py-1 px-2 bg-gray-600 text-white text-sm rounded-lg">
+              Created NFTs: {userCreatedNfts?.length}
+            </p>
             <p className="py-1 px-2 bg-gray-600 text-white text-sm rounded-lg mx-2">Listed NFTs: 0</p>
             <p className="py-1 px-2 bg-gray-600 text-white text-sm rounded-lg">Created Campaigns: 0</p>
           </div>
@@ -82,21 +85,36 @@ const Profile = () => {
         />
         <div className="w-full">
           {tabIndex === 0 ? (
-            // display created/minted NFTs
-            <div className="">
-              <div className="w-full grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6 mt-10">
-                {userCreatedNfts?.map((nft) => (
-                  <NFTCard key={nft?.tokenId} nft={nft} />
-                ))}
-              </div>
+            // here the selected tab is 'Created Tokens'
+            <div>
+              {isLoading === true ? (
+                <div className="grid grid-cols-1 gap-y-6 sm:gap-y-8 sm:grid-cols-2 gap-x-6 lg:grid-cols-4">
+                  {Skeleton(4)}
+                </div>
+              ) : (
+                <div className="">
+                  <div className="w-full grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6 mt-10">
+                    {userCreatedNfts?.map((nft) => (
+                      <NFTCard key={nft?.tokenId} nft={nft} />
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           ) : tabIndex === 1 ? (
-            <div className="">
-              <div className="w-full grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6 mt-10">
-                {[1, 2].map((number) => (
-                  <NFTCard key={number} number={number} />
-                ))}
-              </div>
+            // here the selected tab is 'Listed Tokens'
+            <div>
+              {isLoading === true ? (
+                <div className="grid grid-cols-1 gap-y-6 sm:gap-y-8 sm:grid-cols-2 gap-x-6 lg:grid-cols-4">
+                  {Skeleton(4)}
+                </div>
+              ) : (
+                <div className="w-full grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6 mt-10">
+                  {[1, 2].map((number) => (
+                    <NFTCard key={number} number={number} />
+                  ))}
+                </div>
+              )}
             </div>
           ) : (
             <div>Crowdfunding Campaigns</div>
