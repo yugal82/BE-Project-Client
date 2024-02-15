@@ -1,6 +1,6 @@
 import React from 'react';
 
-const PropertiesComponent = ({ property, index, handlePropertyChange }) => {
+const PropertiesComponent = ({ property, index, onPropertyChange }) => {
   return (
     <div className="flex gap-x-4 mt-3">
       <div className="flex">
@@ -8,7 +8,7 @@ const PropertiesComponent = ({ property, index, handlePropertyChange }) => {
           Trait
         </div>
         <input
-          onChange={(e) => handlePropertyChange(e, index)}
+          onChange={(e) => onPropertyChange(e, index)}
           value={property?.trait}
           className="block w-full sm:p-2 text-white bg-transparent rounded-lg rounded-l-none border border-gray-300 outline-none"
           type="text"
@@ -20,7 +20,7 @@ const PropertiesComponent = ({ property, index, handlePropertyChange }) => {
           Value
         </div>
         <input
-          onChange={(e) => handlePropertyChange(e, index)}
+          onChange={(e) => onPropertyChange(e, index)}
           value={property?.value}
           className="block w-full sm:p-2 text-white bg-transparent rounded-lg rounded-l-none border border-gray-300 outline-none"
           type="text"
