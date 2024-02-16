@@ -1,5 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import FundCard from '../crowd-components/FundCard';
 
 const ExploreCampaigns = ({ title, isLoading, campaigns }) => {
   const navigate = useNavigate();
@@ -21,6 +22,12 @@ const ExploreCampaigns = ({ title, isLoading, campaigns }) => {
         {!isLoading && campaigns.length === 0 && (
           <p className=" font-semibold text-base text-[#818183] ">You have not created any campaigns yet</p>
         )}
+
+        {!isLoading &&
+          campaigns.length > 0 &&
+          campaigns.map((campaign) => (
+            <FundCard key={campaign.id} {...campaign} handleClick={() => handleNavigate(campaign)} />
+          ))}
       </div>
     </div>
   );
