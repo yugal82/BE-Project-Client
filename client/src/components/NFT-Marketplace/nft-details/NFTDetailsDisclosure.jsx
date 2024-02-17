@@ -3,7 +3,7 @@ import { Disclosure, Transition } from '@headlessui/react';
 import { FaChevronDown } from 'react-icons/fa6';
 import { IoInformationCircle } from 'react-icons/io5';
 
-const NFTDetailsDisclosure = () => {
+const NFTDetailsDisclosure = ({ tokenId, NFTMarketplaceContractAddress }) => {
   return (
     <div className="w-full">
       <div className="w-full rounded-2xl bg-gray-800 p-2">
@@ -29,7 +29,7 @@ const NFTDetailsDisclosure = () => {
                   <div>
                     <div className="flex items-center justify-between py-1">
                       <p className="text-medium font-semibold text-white">Token Id</p>
-                      <p>2124</p>
+                      <p>{tokenId}</p>
                     </div>
                     <div className="flex items-center justify-between py-1">
                       <p className="text-medium font-semibold text-white">Blockchain</p>
@@ -41,7 +41,9 @@ const NFTDetailsDisclosure = () => {
                     </div>
                     <div className="flex items-center justify-between py-1">
                       <p className="text-medium font-semibold text-white">Contract Address</p>
-                      <p>0xca2....52rd1</p>
+                      <p>
+                        {NFTMarketplaceContractAddress.substr(0, 5)}...{NFTMarketplaceContractAddress.substr(-5)}
+                      </p>
                     </div>
                   </div>
                 </Disclosure.Panel>
