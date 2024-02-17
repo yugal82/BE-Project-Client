@@ -9,8 +9,6 @@ import { BrowserRouter } from 'react-router-dom';
 
 import { StateContextProvider } from './context';
 
-// console.log(process.env.REACT_APP_THIRDWEB_API_KEY);
-
 const container = document.getElementById('root');
 const root = createRoot(container);
 root.render(
