@@ -15,10 +15,12 @@ import { HiOutlineMinus } from 'react-icons/hi';
 import { useAddress } from '@thirdweb-dev/react';
 import { createToken, uploadImgToIPFS, uploadJsonMetadataToIPFS } from '../../../api/nft-marketplace-api';
 import { useNavigate } from 'react-router-dom';
+import { useStateContext } from '../../../context';
 
 const NFTCreate = () => {
   const address = useAddress();
   const navigate = useNavigate();
+  const { setIsUserNFTsFetched } = useStateContext();
 
   // states
   const [imgFile, setImgFile] = useState(null);
@@ -96,6 +98,7 @@ const NFTCreate = () => {
       }
 
       resetForm();
+      setIsUserNFTsFetched(false);
       setTimeout(() => {
         navigate('/profile');
       }, 3000);
@@ -157,7 +160,7 @@ const NFTCreate = () => {
   return (
     <div className="">
       {!address && <ConnectWalletPopup />}
-      {isLoading && <LoadingAnimation />}
+      {isLoading && <LoadingAnimation message={'Please wait while we are creating your NFT!'} />}
       {txnError && <ErrorPopup message={txnErrorMsg} />}
       {success && <SuccessPopup message={'Your token was minted successfully! Visit profile to view your NFT.'} />}
       <NFTNavbar />

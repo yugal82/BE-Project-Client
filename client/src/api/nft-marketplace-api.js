@@ -89,3 +89,36 @@ export const createToken = async (uri, price, walletAddress) => {
     }
   }
 };
+
+export const fetchDataOfItemFromIPFS = async (nft) => {
+  try {
+    const url = nft?.tokenURI;
+    const ipfsMetadata = await axios.get(url);
+    const mappedNftData = mapNftData(ipfsMetadata?.data, nft);
+    return mappedNftData;
+  } catch (error) {
+    return {
+      status: 'failure',
+      message: 'Something went wrong while fetching data from IPFS.',
+      code: 400,
+    };
+  }
+};
+
+const mapNftData = (ipfsMetadata, nft) => {
+  const mappedNftData = {
+    name: ipfsMetadata?.itemName,
+    externalLink: ipfsMetadata?.externalLink,
+    price: parseInt(nft?.price),
+    description: ipfsMetadata?.description,
+    attributes: ipfsMetadata?.attributes,
+    media: ipfsMetadata?.image,
+    tokenId: parseInt(nft?.tokenId),
+    isListed: nft?.isListed,
+    owner: nft?.owner,
+    seller: nft?.seller,
+    tokenUri: nft?.tokenURI,
+  };
+
+  return mappedNftData;
+};
