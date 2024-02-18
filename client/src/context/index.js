@@ -14,6 +14,7 @@ const StateContext = createContext();
 
 export const StateContextProvider = ({ children }) => {
   const [userCreatedNfts, setUserCreatedNfts] = useState([]);
+  const [userListedNfts, setUserListedNfts] = useState([]);
   const [isUserNFTsFetched, setIsUserNFTsFetched] = useState(false);
 
   const { contract } = useContract('0x27Edf40a51A6726cd7ee742453ce8947EEB7A76d');
@@ -98,7 +99,24 @@ export const StateContextProvider = ({ children }) => {
       setUserCreatedNfts(mintedNfts);
       setIsUserNFTsFetched(true);
     } catch (error) {
-      alert('Error');
+      alert(error);
+    }
+  };
+
+  const getUserListedNfts = async () => {
+    try {
+      const marketplaceContract = getNFTMarketplaceContractObject(address);
+      const listedTokens = await marketplaceContract.fetchListedItemsofUser();
+      const tokens = await Promise.all(
+        listedTokens.map(async (nft) => {
+          const metadata = await fetchDataOfItemFromIPFS(nft);
+          return metadata;
+        })
+      );
+      const listedNfts = tokens.filter((nft) => nft?.isListed === true);
+      setUserListedNfts(listedNfts);
+    } catch (error) {
+      alert(error);
     }
   };
 
@@ -117,6 +135,8 @@ export const StateContextProvider = ({ children }) => {
         userCreatedNfts,
         isUserNFTsFetched,
         setIsUserNFTsFetched,
+        getUserListedNfts,
+        userListedNfts,
       }}
     >
       {children}

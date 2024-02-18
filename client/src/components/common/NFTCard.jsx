@@ -1,11 +1,23 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { NFTMarketplaceContractAddress } from '../../utils/constants';
+import { useAddress } from '@thirdweb-dev/react';
 
 const NFTCard = ({ nft }) => {
+  const address = useAddress();
+  const navigate = useNavigate();
+
+  const navigateTo = () => {
+    navigate(`/token/${NFTMarketplaceContractAddress}/${nft?.tokenId}`, { state: { nft } });
+  };
+
+  const owner = nft?.owner;
+  const seller = nft?.seller;
+  const isListed = nft?.isListed;
+
   return (
-    <Link
-      to={`/token/${NFTMarketplaceContractAddress}/${nft?.tokenId}`}
+    <div
+      onClick={navigateTo}
       className="p-2 border border-gray-700 rounded-lg cursor-pointer hover:scale-105 transition-all ease-in-out duration-300 shadow-sm shadow-gray-700"
     >
       <div className="p-1">
@@ -16,9 +28,9 @@ const NFTCard = ({ nft }) => {
       </div>
       <div className="flex items-center justify-between px-2">
         <span>{nft?.price} ETH</span>
-        <button>Buy</button>
+        <button onClick={navigateTo}>{address === owner && isListed === false ? 'Sell' : 'Buy'}</button>
       </div>
-    </Link>
+    </div>
   );
 };
 
