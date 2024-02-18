@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import NFTNavbar from '../nft-home/NFTNavbar';
 import Footer from '../../common/Footer/Footer';
 import NFTPropertiesDisclosure from './NFTPropertiesDisclosure';
@@ -7,8 +7,11 @@ import { IoShareOutline } from 'react-icons/io5';
 import { Link, useLocation } from 'react-router-dom';
 import { useAddress } from '@thirdweb-dev/react';
 import { NFTMarketplaceContractAddress } from '../../../utils/constants';
+import SellPopup from '../../common/popup/SellPopup';
 
 const NFTDetails = () => {
+  const [isSellPopupOpen, setIsSellPopupOpen] = useState(false);
+
   const address = useAddress();
   const location = useLocation();
   const nft = location?.state?.nft;
@@ -17,9 +20,14 @@ const NFTDetails = () => {
   const seller = nft?.seller;
   const isListed = nft?.isListed;
 
+  const handleSell = () => {
+    setIsSellPopupOpen(true);
+  };
+
   return (
     <div>
       <NFTNavbar />
+      {isSellPopupOpen && <SellPopup nft={nft} setIsSellPopupOpen={setIsSellPopupOpen} />}
       <div className="w-full px-8 py-12 sm:py-16 text-white">
         <div className="w-full sm:px-10 md:px-16 md:flex">
           <div className="md:w-8/12 rounded-lg">
@@ -63,7 +71,10 @@ const NFTDetails = () => {
                 {address === owner ? (
                   <div>
                     {isListed === false ? (
-                      <button className="w-full mt-4 md:mt-0 py-3 px-4 md:px-20 bg-[#1d4ed8] font-semibold text-lg rounded-lg">
+                      <button
+                        onClick={handleSell}
+                        className="w-full mt-4 md:mt-0 py-3 px-4 md:px-20 bg-[#1d4ed8] font-semibold text-lg rounded-lg"
+                      >
                         List Now
                       </button>
                     ) : (

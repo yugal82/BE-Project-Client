@@ -28,7 +28,7 @@ const NFTCard = ({ nft }) => {
       </div>
       <div className="flex items-center justify-between px-2">
         <span>{nft?.price} ETH</span>
-        <button onClick={navigateTo}>{address === owner && isListed === false ? 'List' : 'Buy'}</button>
+        <button onClick={navigateTo}>{address === owner && isListed === false ? 'Sell' : 'Buy'}</button>
       </div>
     </div>
   );
