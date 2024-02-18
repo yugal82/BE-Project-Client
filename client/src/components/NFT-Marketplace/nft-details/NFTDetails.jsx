@@ -3,14 +3,21 @@ import NFTNavbar from '../nft-home/NFTNavbar';
 import Footer from '../../common/Footer/Footer';
 import NFTPropertiesDisclosure from './NFTPropertiesDisclosure';
 import NFTDetailsDisclosure from './NFTDetailsDisclosure';
+import { NFTMarketplaceContractAddress } from '../../../utils/constants';
+import SellPopup from '../../common/popup/SellPopup';
+import LoadingAnimation from '../../common/LoadingAnimation';
+import SuccessPopup from '../../common/popup/SuccessPopup';
+import ErrorPopup from '../../common/popup/ErrorPopup';
 import { IoShareOutline } from 'react-icons/io5';
 import { Link, useLocation } from 'react-router-dom';
 import { useAddress } from '@thirdweb-dev/react';
-import { NFTMarketplaceContractAddress } from '../../../utils/constants';
-import SellPopup from '../../common/popup/SellPopup';
 
 const NFTDetails = () => {
   const [isSellPopupOpen, setIsSellPopupOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [txnError, setTxnError] = useState(false);
+  const [txnErrorMsg, setTxnErrorMsg] = useState('');
+  const [success, setSuccess] = useState(false);
 
   const address = useAddress();
   const location = useLocation();
@@ -24,10 +31,29 @@ const NFTDetails = () => {
     setIsSellPopupOpen(true);
   };
 
+  const handleError = (errorMsg) => {
+    setTxnError(true);
+    setTxnErrorMsg(errorMsg);
+  };
+
   return (
     <div>
       <NFTNavbar />
-      {isSellPopupOpen && <SellPopup nft={nft} setIsSellPopupOpen={setIsSellPopupOpen} />}
+      {isSellPopupOpen && (
+        <SellPopup
+          nft={nft}
+          setIsSellPopupOpen={setIsSellPopupOpen}
+          address={address}
+          setIsLoading={setIsLoading}
+          setSuccess={setSuccess}
+          handleError={handleError}
+        />
+      )}
+      {isLoading && <LoadingAnimation message={'Wait while we are listing your token.'} />}
+      {txnError && <ErrorPopup message={txnErrorMsg} />}
+      {success && (
+        <SuccessPopup message={'Your token was listed for sale successfully! Visit explore page to view your NFT.'} />
+      )}
       <div className="w-full px-8 py-12 sm:py-16 text-white">
         <div className="w-full sm:px-10 md:px-16 md:flex">
           <div className="md:w-8/12 rounded-lg">
@@ -55,6 +81,7 @@ const NFTDetails = () => {
                 <a
                   href={`https://sepolia.etherscan.io/address/${nft?.owner}`}
                   target="_blank"
+                  rel="noreferrer"
                   className="text-[#1d4ed8] cursor-pointer"
                 >
                   {nft?.owner.substr(0, 5)}....{nft?.owner.substr(-5)}
@@ -68,7 +95,7 @@ const NFTDetails = () => {
                 <p className="text-3xl font-semibold">{nft?.price} ETH</p>
               </div>
               <div className="w-full">
-                {address === owner ? (
+                {address === seller ? (
                   <div>
                     {isListed === false ? (
                       <button

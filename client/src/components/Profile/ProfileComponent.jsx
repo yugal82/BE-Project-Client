@@ -9,7 +9,7 @@ import { Skeleton } from '../common/Skeleton';
 import { FaEthereum } from 'react-icons/fa6';
 import { Link } from 'react-router-dom';
 
-const ProfileComponent = ({ address, userCreatedNfts, isLoading }) => {
+const ProfileComponent = ({ address, userCreatedNfts, isLoading, userListedNfts }) => {
   const [tabIndex, setTabIndex] = useState(0);
   const getSelectedTabIndex = (tabIndex) => setTabIndex(tabIndex);
 
@@ -55,7 +55,9 @@ const ProfileComponent = ({ address, userCreatedNfts, isLoading }) => {
             <p className="py-1 px-2 bg-gray-600 text-white text-xs sm:text-sm rounded-lg">
               Created Tokens: {userCreatedNfts?.length}
             </p>
-            <p className="py-1 px-2 bg-gray-600 text-white text-xs sm:text-sm rounded-lg mx-2">Listed Tokens: 0</p>
+            <p className="py-1 px-2 bg-gray-600 text-white text-xs sm:text-sm rounded-lg mx-2">
+              Listed Tokens: {userListedNfts?.length}
+            </p>
             <p className="py-1 px-2 bg-gray-600 text-white text-xs sm:text-sm rounded-lg">Created Campaigns: 0</p>
           </div>
         </div>
@@ -99,14 +101,14 @@ const ProfileComponent = ({ address, userCreatedNfts, isLoading }) => {
                 </div>
               ) : (
                 <div>
-                  {true ? (
+                  {userListedNfts?.length === 0 ? (
                     <div className="w-full border-2 border-dashed border-gray-500 p-6 sm:p-12">
                       <p className="text-base sm:text-xl">You have not listed any tokens yet.</p>
                     </div>
                   ) : (
                     <div className="w-full grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6 mt-10">
-                      {[].map((number) => (
-                        <NFTCard key={number} number={number} />
+                      {userListedNfts?.map((nft) => (
+                        <NFTCard key={nft?.tokenId} nft={nft} />
                       ))}
                     </div>
                   )}

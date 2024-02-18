@@ -71,6 +71,7 @@ export const createToken = async (uri, price, walletAddress) => {
   try {
     const contract = getNFTMarketplaceContractObject(walletAddress);
     const mintedToken = await contract.mintNFT(price, tokenURI);
+    await mintedToken.wait();
     return {
       mintedToken,
       status: 'success',
@@ -85,7 +86,31 @@ export const createToken = async (uri, price, walletAddress) => {
         code: 4001,
       };
     } else {
-      alert('something went wrong');
+      return { status: 'failure', message: 'Something went wrong', code: 400 };
+    }
+  }
+};
+
+export const listToken = async (tokenId, price, walletAddress) => {
+  try {
+    const contract = getNFTMarketplaceContractObject(walletAddress);
+    const tx = await contract?.listItem(tokenId, price);
+    await tx.wait();
+    return {
+      status: 'success',
+      message: 'Token listed for sale successfully',
+      code: 200,
+      data: tx,
+    };
+  } catch (error) {
+    if (error.code === 'ACTION_REJECTED') {
+      return {
+        status: 'failure',
+        message: 'User denied transaction',
+        code: 4001,
+      };
+    } else {
+      return { status: 'failure', message: 'Something went wrong', code: 400 };
     }
   }
 };

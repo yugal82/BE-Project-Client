@@ -2,10 +2,15 @@ import React from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { Fragment, useState } from 'react';
 import { FaX } from 'react-icons/fa6';
+import { listToken } from '../../../api/nft-marketplace-api';
+import { useNavigate } from 'react-router-dom';
 
-const SellPopup = ({ nft, setIsSellPopupOpen }) => {
+const SellPopup = ({ nft, setIsSellPopupOpen, address, setIsLoading, setSuccess, handleError }) => {
   let [isOpen, setIsOpen] = useState(true);
   const [price, setPrice] = useState(null);
+  const [isPriceError, setIsPriceError] = useState(false);
+
+  const navigate = useNavigate();
 
   const closeModal = () => {
     setIsOpen(false);
@@ -14,8 +19,35 @@ const SellPopup = ({ nft, setIsSellPopupOpen }) => {
 
   const onPriceChange = (e) => {
     e.preventDefault();
+    if (e?.target?.value <= 0) setIsPriceError(true);
+    else setIsPriceError(false);
 
     setPrice(e?.target?.value);
+  };
+
+  const handleListing = async () => {
+    if (!isPriceError && price !== null) {
+      closeModal();
+      setIsLoading(true);
+      const listedItem = await listToken(nft?.tokenId, price, address);
+      console.log(listedItem);
+      setIsLoading(false);
+      if (listedItem?.code === 200) {
+        setSuccess(true);
+        //navigate to explore page
+        setTimeout(() => {
+          navigate('/nft-marketplace/explore');
+        }, 5000);
+      } else {
+        if (listedItem?.code === 4001) {
+          handleError('User denied transaction. Please try again');
+        } else {
+          handleError('Something went wrong. Please try again');
+        }
+      }
+    } else {
+      setIsPriceError(true);
+    }
   };
 
   return (
@@ -71,22 +103,25 @@ const SellPopup = ({ nft, setIsSellPopupOpen }) => {
                           ETH
                         </span>
                       </div>
+                      {isPriceError && (
+                        <small className="text-red-700 font-semibold">Price cannot be negative or 0</small>
+                      )}
                     </div>
                     <div className="w-full mt-4 border-b border-gray-500"></div>
                     <div className="w-full mt-4">
                       <div className="flex items-center justify-between text-white border-b border-gray-500 py-2">
-                        <p className="">Total price:</p>
+                        <p className="">Total price</p>
                         <p className="">{price ? price : '--'} ETH</p>
                       </div>
                       <div className="border-b border-gray-500 py-2">
                         <div className="flex items-center justify-between text-white ">
-                          <p className="">Platform fee:</p>
+                          <p className="">Platform fee</p>
                           <p className="">0%</p>
                         </div>
                         <small className="text-gray-400">Yep, you read that right! 0% platform fees</small>
                       </div>
                       <div className="flex items-center justify-between text-white py-2">
-                        <p className="">Potential Earnings:</p>
+                        <p className="">Potential Earnings</p>
                         <p className="">{price ? price : '--'} ETH</p>
                       </div>
                     </div>
@@ -96,7 +131,7 @@ const SellPopup = ({ nft, setIsSellPopupOpen }) => {
                     <button
                       type="button"
                       className="inline-flex justify-center rounded-md border border-transparent  px-4 py-2 text-sm text-white bg-[#1d4ed8] font-semibold"
-                      onClick={() => {}}
+                      onClick={handleListing}
                     >
                       List for sale
                     </button>
