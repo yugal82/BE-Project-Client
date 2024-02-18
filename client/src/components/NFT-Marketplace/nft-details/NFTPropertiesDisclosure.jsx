@@ -3,7 +3,7 @@ import { Disclosure, Transition } from '@headlessui/react';
 import { FaChevronDown } from 'react-icons/fa6';
 import { FaList } from 'react-icons/fa';
 
-const NFTPropertiesDisclosure = () => {
+const NFTPropertiesDisclosure = ({ metadata }) => {
   return (
     <div className="w-full">
       <div className="w-full rounded-2xl bg-gray-800 p-2">
@@ -26,28 +26,18 @@ const NFTPropertiesDisclosure = () => {
                 leaveTo="transform scale-95 opacity-0"
               >
                 <Disclosure.Panel className="px-4 pb-2 pt-4 text-sm text-white">
-                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-                    <div className="border-2 border-gray-600 rounded-lg p-2">
-                      <p className="">Trait</p>
-                      <p className="text-lg leading-tight">Value</p>
+                  {metadata?.length === 0 ? (
+                    <span>No attribute to show</span>
+                  ) : (
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                      {metadata?.map((attribute) => (
+                        <div key={attribute?.trait} className="border-2 border-gray-600 rounded-lg p-2">
+                          <p className="">{attribute?.trait}</p>
+                          <p className="text-lg leading-tight">{attribute?.value}</p>
+                        </div>
+                      ))}
                     </div>
-                    <div className="border-2 border-gray-600 rounded-lg p-2">
-                      <p className="">Trait</p>
-                      <p className="text-lg leading-tight">Value</p>
-                    </div>
-                    <div className="border-2 border-gray-600 rounded-lg p-2">
-                      <p className="">Trait</p>
-                      <p className="text-lg leading-tight">Value</p>
-                    </div>
-                    <div className="border-2 border-gray-600 rounded-lg p-2">
-                      <p className="">Trait</p>
-                      <p className="text-lg leading-tight">Value</p>
-                    </div>
-                    <div className="border-2 border-gray-600 rounded-lg p-2">
-                      <p className="">Trait</p>
-                      <p className="text-lg leading-tight">Value</p>
-                    </div>
-                  </div>
+                  )}
                 </Disclosure.Panel>
               </Transition>
             </>
