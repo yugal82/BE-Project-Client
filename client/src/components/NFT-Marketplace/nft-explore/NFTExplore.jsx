@@ -39,7 +39,7 @@ const NFTExplore = () => {
           ) : (
             <div className="w-full grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 gap-4 mt-10">
               {marketListedTokens?.map((nft) => (
-                <NFTCard key={nft?.tokenId} nft={nft} />
+                <NFTCard key={nft?.tokenId} nft={nft} address={address} />
               ))}
             </div>
           )}
