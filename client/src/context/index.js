@@ -16,6 +16,8 @@ export const StateContextProvider = ({ children }) => {
   const [userCreatedNfts, setUserCreatedNfts] = useState([]);
   const [userListedNfts, setUserListedNfts] = useState([]);
   const [isUserNFTsFetched, setIsUserNFTsFetched] = useState(false);
+  const [marketListedTokens, setMarketListedTokens] = useState([]);
+  const [isMarketItemsFetched, setIsMarketItemsFetched] = useState(false);
 
   const { contract } = useContract('0x27Edf40a51A6726cd7ee742453ce8947EEB7A76d');
 
@@ -99,7 +101,11 @@ export const StateContextProvider = ({ children }) => {
       setUserCreatedNfts(mintedNfts);
       setIsUserNFTsFetched(true);
     } catch (error) {
-      alert(error);
+      return {
+        status: 'failure',
+        message: error.message,
+        code: 400,
+      };
     }
   };
 
@@ -116,7 +122,32 @@ export const StateContextProvider = ({ children }) => {
       const listedNfts = tokens.filter((nft) => nft?.isListed === true);
       setUserListedNfts(listedNfts);
     } catch (error) {
-      alert(error);
+      return {
+        status: 'failure',
+        message: error.message,
+        code: 400,
+      };
+    }
+  };
+
+  const getListedNftsOfMarketplace = async () => {
+    try {
+      const marketplaceContract = getNFTMarketplaceContractObject(address);
+      const marketplaceListedNfts = await marketplaceContract?.fetchListedMarketItems();
+      const marketItems = await Promise.all(
+        marketplaceListedNfts.map(async (nft) => {
+          const metadata = await fetchDataOfItemFromIPFS(nft);
+          return metadata;
+        })
+      );
+      setMarketListedTokens(marketItems);
+      setIsMarketItemsFetched(true);
+    } catch (error) {
+      return {
+        status: 'failure',
+        message: error.message,
+        code: 400,
+      };
     }
   };
 
@@ -137,6 +168,10 @@ export const StateContextProvider = ({ children }) => {
         setIsUserNFTsFetched,
         getUserListedNfts,
         userListedNfts,
+        getListedNftsOfMarketplace,
+        marketListedTokens,
+        isMarketItemsFetched,
+        setIsMarketItemsFetched,
       }}
     >
       {children}

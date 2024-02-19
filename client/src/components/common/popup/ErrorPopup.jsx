@@ -2,11 +2,12 @@ import { Dialog, Transition } from '@headlessui/react';
 import { Fragment, useState } from 'react';
 import { FaX } from 'react-icons/fa6';
 
-const ErrorPopup = ({ message }) => {
+const ErrorPopup = ({ message, setTxnError }) => {
   let [isOpen, setIsOpen] = useState(true);
 
   function closeModal() {
     setIsOpen(false);
+    setTxnError(false);
   }
 
   return (
