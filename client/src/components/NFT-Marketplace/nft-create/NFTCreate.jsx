@@ -15,10 +15,12 @@ import { HiOutlineMinus } from 'react-icons/hi';
 import { useAddress } from '@thirdweb-dev/react';
 import { createToken, uploadImgToIPFS, uploadJsonMetadataToIPFS } from '../../../api/nft-marketplace-api';
 import { useNavigate } from 'react-router-dom';
+import { useStateContext } from '../../../context';
 
 const NFTCreate = () => {
   const address = useAddress();
   const navigate = useNavigate();
+  const { setIsUserNFTsFetched } = useStateContext();
 
   // states
   const [imgFile, setImgFile] = useState(null);
@@ -56,6 +58,12 @@ const NFTCreate = () => {
 
     // if all input filled, then create a new NFT.
     if (isValidDesc(descriptionRef.current.value) && isValidItemName(itemNameRef.current.value) && imgFile) {
+      if (!address) {
+        setTxnError(true);
+        setTxnErrorMsg('Please connect to a wallet before creating a new token.');
+        resetForm();
+        return;
+      }
       setIsLoading(true);
 
       // function call to upload the image to IPFS.
@@ -83,6 +91,10 @@ const NFTCreate = () => {
         if (res?.status === 'success') {
           setIsLoading(false);
           setSuccess(true);
+          setIsUserNFTsFetched(false);
+          setTimeout(() => {
+            navigate('/profile');
+          }, 3000);
         } else {
           setIsLoading(false);
           if (res?.code === 4001) {
@@ -96,9 +108,6 @@ const NFTCreate = () => {
       }
 
       resetForm();
-      setTimeout(() => {
-        navigate('/profile');
-      }, 3000);
     }
   };
 
@@ -158,7 +167,7 @@ const NFTCreate = () => {
     <div className="">
       {!address && <ConnectWalletPopup />}
       {isLoading && <LoadingAnimation message={'Please wait while we are creating your NFT!'} />}
-      {txnError && <ErrorPopup message={txnErrorMsg} />}
+      {txnError && <ErrorPopup message={txnErrorMsg} setTxnError={setTxnError} />}
       {success && <SuccessPopup message={'Your token was minted successfully! Visit profile to view your NFT.'} />}
       <NFTNavbar />
       <div className="w-full px-8 py-12 sm:py-16 text-white">
