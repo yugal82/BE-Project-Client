@@ -1,13 +1,37 @@
 import { Dialog, Transition } from '@headlessui/react';
 import { Fragment, useState } from 'react';
 import { FaX } from 'react-icons/fa6';
+import { useNavigate } from 'react-router-dom';
+import { buyToken } from '../../../api/nft-marketplace-api';
 
 const BuyPopup = ({ nft, setIsBuyPopupOpen, address, setIsLoading, setSuccess, handleError }) => {
   let [isOpen, setIsOpen] = useState(true);
 
+  const navigate = useNavigate();
+
   const closeModal = () => {
     setIsOpen(false);
     setIsBuyPopupOpen(false);
+  };
+
+  const handleCompleteBuy = async (e) => {
+    e.preventDefault();
+    closeModal();
+    setIsLoading(true);
+    const boughtToken = await buyToken(nft?.tokenId, nft?.price?.toString(), address);
+    setIsLoading(false);
+    if (boughtToken?.code === 200) {
+      setSuccess(true);
+      setTimeout(() => {
+        navigate('/profile');
+      }, 5000);
+    } else {
+      if (boughtToken?.code === 4001) {
+        handleError('User denied transaction. Please try again');
+      } else {
+        handleError('Something went wrong. Please try again');
+      }
+    }
   };
 
   return (

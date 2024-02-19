@@ -76,7 +76,7 @@ const NFTDetails = () => {
           handleError={handleError}
         />
       )}
-      {isLoading && <LoadingAnimation message={'Wait while we are listing your token.'} />}
+      {isLoading && <LoadingAnimation message={'Wait while we carry out your transaction.'} />}
       {txnError && <ErrorPopup message={txnErrorMsg} setTxnError={setTxnError} />}
       {success && (
         <SuccessPopup message={'Your token was listed for sale successfully! Visit explore page to view your NFT.'} />
