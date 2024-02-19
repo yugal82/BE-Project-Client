@@ -2,6 +2,8 @@
 
 import axios from 'axios';
 import { getNFTMarketplaceContractObject } from '../utils/contract';
+import { walletConnect } from '@thirdweb-dev/react';
+import { ethers } from 'ethers';
 const pinata_jwt = `Bearer ${process.env.REACT_APP_PINATA_JWT}`;
 
 export const uploadImgToIPFS = async (image) => {
@@ -80,11 +82,7 @@ export const createToken = async (uri, price, walletAddress) => {
     };
   } catch (error) {
     if (error.code === 'ACTION_REJECTED') {
-      return {
-        status: 'failure',
-        message: 'User denied transaction',
-        code: 4001,
-      };
+      return { status: 'failure', message: 'User denied transaction', code: 4001 };
     } else {
       return { status: 'failure', message: 'Something went wrong', code: 400 };
     }
@@ -104,11 +102,35 @@ export const listToken = async (tokenId, price, walletAddress) => {
     };
   } catch (error) {
     if (error.code === 'ACTION_REJECTED') {
-      return {
-        status: 'failure',
-        message: 'User denied transaction',
-        code: 4001,
-      };
+      return { status: 'failure', message: 'User denied transaction', code: 4001 };
+    } else {
+      return { status: 'failure', message: 'Something went wrong', code: 400 };
+    }
+  }
+};
+
+export const buyToken = async (tokenId, price, walletAddress) => {
+  try {
+    const contract = getNFTMarketplaceContractObject(walletAddress);
+    const estimatedGas = await contract.estimateGas.buyItem(tokenId, {
+      value: ethers.utils.parseUnits(price, 'ether'),
+    });
+    const bufferGas = estimatedGas.mul(15).toNumber();
+
+    const tx = await contract.buyItem(tokenId, {
+      value: ethers.utils.parseUnits(price, 'ether'),
+      gasLimit: estimatedGas.add(bufferGas),
+    });
+    await tx.wait();
+    return {
+      status: 'success',
+      message: 'Token bought successfully',
+      code: 200,
+      data: tx,
+    };
+  } catch (error) {
+    if (error.code === 'ACTION_REJECTED') {
+      return { status: 'failure', message: 'User denied transaction', code: 4001 };
     } else {
       return { status: 'failure', message: 'Something went wrong', code: 400 };
     }
