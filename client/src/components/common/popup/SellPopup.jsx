@@ -4,11 +4,14 @@ import { Fragment, useState } from 'react';
 import { FaX } from 'react-icons/fa6';
 import { listToken } from '../../../api/nft-marketplace-api';
 import { useNavigate } from 'react-router-dom';
+import { useStateContext } from '../../../context';
 
 const SellPopup = ({ nft, setIsSellPopupOpen, address, setIsLoading, setSuccess, handleError }) => {
   let [isOpen, setIsOpen] = useState(true);
   const [price, setPrice] = useState(null);
   const [isPriceError, setIsPriceError] = useState(false);
+
+  const { setIsMarketItemsFetched } = useStateContext();
 
   const navigate = useNavigate();
 
@@ -30,10 +33,10 @@ const SellPopup = ({ nft, setIsSellPopupOpen, address, setIsLoading, setSuccess,
       closeModal();
       setIsLoading(true);
       const listedItem = await listToken(nft?.tokenId, price, address);
-      console.log(listedItem);
       setIsLoading(false);
       if (listedItem?.code === 200) {
         setSuccess(true);
+        setIsMarketItemsFetched(false);
         //navigate to explore page
         setTimeout(() => {
           navigate('/nft-marketplace/explore');

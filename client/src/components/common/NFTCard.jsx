@@ -1,10 +1,8 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { NFTMarketplaceContractAddress } from '../../utils/constants';
-import { useAddress } from '@thirdweb-dev/react';
 
-const NFTCard = ({ nft }) => {
-  const address = useAddress();
+const NFTCard = ({ nft, address }) => {
   const navigate = useNavigate();
 
   const navigateTo = () => {
@@ -28,7 +26,11 @@ const NFTCard = ({ nft }) => {
       </div>
       <div className="flex items-center justify-between px-2">
         <span>{nft?.price} ETH</span>
-        <button onClick={navigateTo}>{address === owner && isListed === false ? 'Sell' : 'Buy'}</button>
+        {address === owner && isListed === false ? (
+          <button onClick={navigateTo}>Sell</button>
+        ) : (
+          <button onClick={navigateTo}>{address === seller && isListed === true ? '' : 'Buy'}</button>
+        )}
       </div>
     </div>
   );
