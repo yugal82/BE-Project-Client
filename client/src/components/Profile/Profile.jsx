@@ -17,7 +17,7 @@ const Profile = () => {
   };
 
   useEffect(() => {
-    if (!isUserNFTsFetched) fetchUserNfts();
+    if (address && !isUserNFTsFetched) fetchUserNfts();
   }, []);
 
   return (

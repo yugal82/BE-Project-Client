@@ -11,6 +11,7 @@ import ErrorPopup from '../../common/popup/ErrorPopup';
 import { IoShareOutline } from 'react-icons/io5';
 import { Link, useLocation } from 'react-router-dom';
 import { useAddress } from '@thirdweb-dev/react';
+import ConnectWalletBtn from '../../common/ConnectWalletBtn';
 
 const NFTDetails = () => {
   const [isSellPopupOpen, setIsSellPopupOpen] = useState(false);
@@ -28,6 +29,11 @@ const NFTDetails = () => {
   const isListed = nft?.isListed;
 
   const handleSell = () => {
+    if (!address) {
+      setTxnError(true);
+      setTxnErrorMsg('Please connect to a wallet before listing a token on the platform.');
+      return;
+    }
     setIsSellPopupOpen(true);
   };
 
@@ -50,7 +56,7 @@ const NFTDetails = () => {
         />
       )}
       {isLoading && <LoadingAnimation message={'Wait while we are listing your token.'} />}
-      {txnError && <ErrorPopup message={txnErrorMsg} />}
+      {txnError && <ErrorPopup message={txnErrorMsg} setTxnError={setTxnError} />}
       {success && (
         <SuccessPopup message={'Your token was listed for sale successfully! Visit explore page to view your NFT.'} />
       )}
@@ -95,28 +101,34 @@ const NFTDetails = () => {
                 <p className="text-3xl font-semibold">{nft?.price} ETH</p>
               </div>
               <div className="w-full">
-                {address === seller ? (
-                  <div>
-                    {isListed === false ? (
-                      <button
-                        onClick={handleSell}
-                        className="w-full mt-4 md:mt-0 py-3 px-4 md:px-20 bg-[#1d4ed8] font-semibold text-lg rounded-lg"
-                      >
-                        List Now
-                      </button>
-                    ) : (
-                      <div className="py-3 lg:px-4 font-semibold text-lg">
-                        You have already listed this NFT.{' '}
-                        <Link to="/nft-marketplace/explore" className="text-[#1d4ed8] text-base underline">
-                          Checkout explore page to see your listed tokens
-                        </Link>
-                      </div>
-                    )}
-                  </div>
+                {!address ? (
+                  <ConnectWalletBtn />
                 ) : (
-                  <button className="w-full mt-4 md:mt-0 py-3 px-4 md:px-20 bg-[#1d4ed8] font-semibold text-lg rounded-lg">
-                    Buy Now
-                  </button>
+                  <>
+                    {address === seller ? (
+                      <div>
+                        {isListed === false ? (
+                          <button
+                            onClick={handleSell}
+                            className="w-full mt-4 md:mt-0 py-3 px-4 md:px-20 bg-[#1d4ed8] font-semibold text-lg rounded-lg"
+                          >
+                            List Now
+                          </button>
+                        ) : (
+                          <div className="py-3 lg:px-4 font-semibold text-lg">
+                            You have already listed this NFT.{' '}
+                            <Link to="/nft-marketplace/explore" className="text-[#1d4ed8] text-base underline">
+                              Checkout explore page to see your listed tokens
+                            </Link>
+                          </div>
+                        )}
+                      </div>
+                    ) : (
+                      <button className="w-full mt-4 md:mt-0 py-3 px-4 md:px-20 bg-[#1d4ed8] font-semibold text-lg rounded-lg">
+                        Buy Now
+                      </button>
+                    )}
+                  </>
                 )}
               </div>
             </div>

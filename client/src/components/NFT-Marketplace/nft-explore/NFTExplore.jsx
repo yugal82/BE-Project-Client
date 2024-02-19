@@ -20,7 +20,7 @@ const NFTExplore = () => {
   };
 
   useEffect(() => {
-    if (!isMarketItemsFetched) fetchMarketItems();
+    if (address && !isMarketItemsFetched) fetchMarketItems();
   }, []);
 
   return (
@@ -31,6 +31,11 @@ const NFTExplore = () => {
         <div className="">
           <h2 className="text-3xl font-semibold">Explore NFTs</h2>
         </div>
+        {!address && (
+          <div className="w-full flex items-center justify-center mt-4 p-10 text-xl border-2 border-dashed border-gray-500">
+            You have seen it all! There is nothing more.
+          </div>
+        )}
         <div>
           {isLoading ? (
             <div className="mt-10 grid grid-cols-1 gap-y-6 sm:gap-y-8 sm:grid-cols-2 gap-x-6 lg:grid-cols-4">
