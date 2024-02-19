@@ -12,9 +12,11 @@ import { IoShareOutline } from 'react-icons/io5';
 import { Link, useLocation } from 'react-router-dom';
 import { useAddress } from '@thirdweb-dev/react';
 import ConnectWalletBtn from '../../common/ConnectWalletBtn';
+import BuyPopup from '../../common/popup/BuyPopup';
 
 const NFTDetails = () => {
   const [isSellPopupOpen, setIsSellPopupOpen] = useState(false);
+  const [isBuyPopupOpen, setIsBuyPopupOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [txnError, setTxnError] = useState(false);
   const [txnErrorMsg, setTxnErrorMsg] = useState('');
@@ -37,6 +39,15 @@ const NFTDetails = () => {
     setIsSellPopupOpen(true);
   };
 
+  const handleBuy = () => {
+    if (!address) {
+      setTxnError(true);
+      setTxnErrorMsg('Please connect to a wallet before listing a token on the platform.');
+      return;
+    }
+    setIsBuyPopupOpen(true);
+  };
+
   const handleError = (errorMsg) => {
     setTxnError(true);
     setTxnErrorMsg(errorMsg);
@@ -49,6 +60,16 @@ const NFTDetails = () => {
         <SellPopup
           nft={nft}
           setIsSellPopupOpen={setIsSellPopupOpen}
+          address={address}
+          setIsLoading={setIsLoading}
+          setSuccess={setSuccess}
+          handleError={handleError}
+        />
+      )}
+      {isBuyPopupOpen && (
+        <BuyPopup
+          nft={nft}
+          setIsBuyPopupOpen={setIsBuyPopupOpen}
           address={address}
           setIsLoading={setIsLoading}
           setSuccess={setSuccess}
@@ -124,7 +145,10 @@ const NFTDetails = () => {
                         )}
                       </div>
                     ) : (
-                      <button className="w-full mt-4 md:mt-0 py-3 px-4 md:px-20 bg-[#1d4ed8] font-semibold text-lg rounded-lg">
+                      <button
+                        onClick={handleBuy}
+                        className="w-full mt-4 md:mt-0 py-3 px-4 md:px-20 bg-[#1d4ed8] font-semibold text-lg rounded-lg"
+                      >
                         Buy Now
                       </button>
                     )}

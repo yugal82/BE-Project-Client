@@ -12,7 +12,7 @@ const NFTSlider = ({ address }) => {
   };
 
   useEffect(() => {
-    fetchMarketItemsForSlider();
+    if (address) fetchMarketItemsForSlider();
   }, []);
 
   return (
