@@ -1,6 +1,5 @@
 import React from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { useStateContext } from '../../../context';
 import { Autoplay, Pagination, Navigation } from 'swiper/modules';
 import SwiperCore from 'swiper';
 import NFTCard from '../../common/NFTCard';
@@ -24,9 +23,8 @@ const breakpoints = {
   },
 };
 
-const Slider = ({ address }) => {
+const Slider = ({ address, marketListedTokens }) => {
   SwiperCore.use([Autoplay]);
-  const { marketListedTokens } = useStateContext();
   return (
     <div className="relative">
       <div className="nextEl hidden lg:block absolute top-[40%] -right-14">
@@ -52,8 +50,8 @@ const Slider = ({ address }) => {
         breakpoints={breakpoints}
       >
         {marketListedTokens?.map((nft) => (
-          <SwiperSlide>
-            <NFTCard key={nft?.tokenId} nft={nft} address={address} />
+          <SwiperSlide key={nft?.tokenId}>
+            <NFTCard nft={nft} address={address} />
           </SwiperSlide>
         ))}
       </Swiper>
