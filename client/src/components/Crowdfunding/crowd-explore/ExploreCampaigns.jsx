@@ -5,7 +5,7 @@ import FundCard from '../crowd-components/FundCard';
 const ExploreCampaigns = ({ title, isLoading, campaigns }) => {
   const navigate = useNavigate();
   const handleNavigate = (campaign) => {
-    navigate(`/campaigns-details/${campaign.title}`, { state: campaign });
+    navigate(`/crowdfunding/campaigns-details/${campaign.title}`, { state: campaign });
   };
 
   return (
