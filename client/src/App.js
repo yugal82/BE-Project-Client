@@ -92,7 +92,7 @@ export default function Home() {
         />
         <Route
           exact
-          path="/crowdfunding/campaign-details/:id"
+          path="/crowdfunding/campaigns-details/:id"
           element={
             <React.Suspense fallback={<SuspenseAnimation />}>
               <CampaignDetails />

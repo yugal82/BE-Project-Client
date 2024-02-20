@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { FormField, CustomButton } from '../crowd-components';
+import { FormField, CustomButton, Loader } from '../crowd-components';
 
 import { ethers } from 'ethers';
 
@@ -8,8 +8,13 @@ import { Money, Campaign } from '../crowd-assets';
 
 import { useNavigate } from 'react-router-dom';
 import { checkIfImage } from '../../../utils';
+import { useStateContext } from '../../../context';
 
 const CreateCampaign = () => {
+  const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
+  const { createCampaign } = useStateContext();
+
   const [form, setForm] = useState({
     name: '',
     title: '',
@@ -23,7 +28,25 @@ const CreateCampaign = () => {
     setForm({ ...form, [fieldName]: e.target.value });
   };
 
-  const handleSubmit = () => {};
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    checkIfImage(form.image, async (exists) => {
+      if (exists) {
+        setIsLoading(true);
+        await createCampaign({
+          ...form,
+          target: ethers.utils.parseUnits(form.target, 18),
+        });
+        setIsLoading(false);
+        navigate('/crowdfunding/explore');
+      } else {
+        alert('Please provide a valid image URL');
+        setForm({ ...form, image: '' });
+      }
+    });
+    console.log(form);
+  };
 
   return (
     <div className=" flex justify-center items-center flex-col rounded-[10px] sm:p-10 p-4 my-6 mx-2 md:mx-16  md:my-12 ">
