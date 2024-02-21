@@ -1,14 +1,8 @@
-import { React, useContext, createContext, useMemo, useState } from 'react';
-
-import { useAddress, useContract, useMetamask, useContractWrite, useMetadata } from '@thirdweb-dev/react';
+import { React, useContext, createContext, useState } from 'react';
+import { useAddress, useContract, useMetamask, useContractWrite } from '@thirdweb-dev/react';
 import { ethers } from 'ethers';
-
-import { EditionMetadataWithOwnerOutputSchema } from '@thirdweb-dev/sdk';
 import { getNFTMarketplaceContractObject } from '../utils/contract';
 import { fetchDataOfItemFromIPFS } from '../api/nft-marketplace-api';
-
-// const address = useAddress();
-// const connect = useMetamask();
 
 const StateContext = createContext();
 
@@ -38,10 +32,26 @@ export const StateContextProvider = ({ children }) => {
         new Date(form.deadline).getTime(),
         form.image,
       ]);
-
-      console.log('contract call success', data);
+      return {
+        status: 'success',
+        code: 200,
+        message: 'Campaign created successfully',
+        data: data,
+      };
     } catch (error) {
-      console.log('contract call fail', error);
+      if (error.reason === 'user rejected transaction') {
+        return {
+          status: 'failure',
+          code: 4001,
+          message: 'User rejected transaction',
+        };
+      } else {
+        return {
+          status: 'failure',
+          code: 400,
+          message: 'Something went wrong. Please try again',
+        };
+      }
     }
   };
 
