@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FormField, CustomButton, Loader } from '../crowd-components';
+import { FormField, CustomButton } from '../crowd-components';
 import { ethers } from 'ethers';
 import { Money } from '../crowd-assets';
 import { useNavigate } from 'react-router-dom';
