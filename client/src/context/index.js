@@ -18,6 +18,8 @@ export const StateContextProvider = ({ children }) => {
   const [isUserNFTsFetched, setIsUserNFTsFetched] = useState(false);
   const [marketListedTokens, setMarketListedTokens] = useState([]);
   const [isMarketItemsFetched, setIsMarketItemsFetched] = useState(false);
+  const [isUserCampaignsFetched, setIsUserCampaignsFetched] = useState(false);
+  const [userCampaigns, setUserCampaigns] = useState([]);
 
   const { contract } = useContract('0x27Edf40a51A6726cd7ee742453ce8947EEB7A76d');
 
@@ -60,10 +62,14 @@ export const StateContextProvider = ({ children }) => {
   };
 
   const getUserCampaigns = async () => {
-    const allCampaigns = await getCampaigns();
+    try {
+      const allCampaigns = await getCampaigns();
 
-    const filteredCampaigns = allCampaigns.filter((campaign) => campaign.owner === address);
-    return filteredCampaigns;
+      const filteredCampaigns = allCampaigns.filter((campaign) => campaign.owner === address);
+      setIsUserCampaignsFetched(true);
+      setUserCampaigns(filteredCampaigns);
+      return filteredCampaigns;
+    } catch (error) {}
   };
 
   const donate = async (pId, amount) => {
@@ -162,6 +168,8 @@ export const StateContextProvider = ({ children }) => {
         getUserCampaigns,
         donate,
         getDonations,
+        isUserCampaignsFetched,
+        userCampaigns,
         getUserNfts,
         userCreatedNfts,
         isUserNFTsFetched,
