@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { ethers } from 'ethers';
-
 import { useStateContext } from '../../../context';
 import { CountBox, CustomButton } from '../crowd-components';
 import { daysLeft, calculateBarPercentage } from '../../../utils';
-import { thirdweb } from '../crowd-assets';
 import CrowdNavbar from '../crowd-home/CrowdNavbar';
 import Footer from '../../common/Footer/Footer';
+import LoadingAnimation from '../../common/LoadingAnimation';
+import ConnectWalletPopup from '../../common/popup/ConnectWalletPopup';
+import SuccessPopup from '../../common/popup/SuccessPopup';
+import ErrorPopup from '../../common/popup/ErrorPopup';
 
 const CampaignDetails = () => {
   const { state } = useLocation();
@@ -18,6 +19,9 @@ const CampaignDetails = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [amount, setAmount] = useState('');
   const [donators, setDonators] = useState([]);
+  const [txnError, setTxnError] = useState(false);
+  const [txnErrorMsg, setTxnErrorMsg] = useState('');
+  const [success, setSuccess] = useState(false);
 
   const remainingDays = daysLeft(state.deadline);
 
@@ -32,20 +36,31 @@ const CampaignDetails = () => {
 
   const handleDonate = async () => {
     setIsLoading(true);
-    await donate(state.pId, amount);
-    navigate('/crowdfunding/explore');
+    const tx = await donate(state.pId, amount);
     setIsLoading(false);
+    if (tx?.status === 'success') {
+      setSuccess(true);
+      setTimeout(() => {
+        navigate('/crowdfunding/explore');
+      }, 5000);
+    } else {
+      setTxnError(true);
+      if (tx?.code === 4001) {
+        setTxnErrorMsg('You denied transaction. Please approve the transaction in your wallet when you try again.');
+      } else {
+        setTxnErrorMsg('Something went wrong. Please try again.');
+      }
+    }
   };
 
   return (
     <>
       <CrowdNavbar />
       <div className="p-2">
-        {isLoading && (
-          <div className="w-full flex items-center justify-center">
-            <div className="animate-spin flex items-center justify-center w-10 h-10 border-b-2 border-white rounded-full"></div>
-          </div>
-        )}
+        {!address && <ConnectWalletPopup />}
+        {success && <SuccessPopup message={'Funds were donated successfully!'} />}
+        {txnError && <ErrorPopup message={txnErrorMsg} setTxnError={setTxnError} />}
+        {isLoading && <LoadingAnimation message={'Please wait while we donote the funds to the campaign.'} />}
         <div className="w-full flex md:flex-row flex-col mt-10 gap-[30px]">
           <div className="flex justify-center p-4 items-center flex-col">
             <img
@@ -74,12 +89,6 @@ const CampaignDetails = () => {
             <div>
               <h4 className="font-epilogue font-semibold text-[18px] text-white uppercase ">Creator</h4>
               <div className=" mt-[20px] flex-grow flex items-center gap-[14px] flex-wrap ">
-                <div
-                  className="w-[52px] h-[52px] flex items-center justify-center rounded-full bg-[#2c2f32] cursor-pointer
-          "
-                >
-                  <img src={thirdweb} alt="User" className="w-[60%] h-[60%] object-contain " />
-                </div>
                 <div>
                   <h4 className=" font-semibold text-[14px] text-white break-all ">{state.owner}</h4>
                   <p className="mt-[4px]  font-normal text-[12px] text-[#808191] ">Support For a Cause</p>
@@ -128,12 +137,18 @@ const CampaignDetails = () => {
                   <h4 className=" font-semibold text-[15px] leading-[22px] text-white">Back it because you believe</h4>
                   <p className=" font-normal mt-[20px[ leading-[22px] text-[#808191]">Support the project</p>
                 </div>
-                <CustomButton
-                  btnType="button"
-                  title="Fund Campaign"
-                  styles="w-full bg-[#8c6dfd]"
-                  handleClick={handleDonate}
-                />
+                {state?.owner === address ? (
+                  <div className="text-white">
+                    <p>You are the creator of this campaign. You cannot donot yourself</p>
+                  </div>
+                ) : (
+                  <CustomButton
+                    btnType="button"
+                    title="Fund Campaign"
+                    styles="w-full bg-[#8c6dfd]"
+                    handleClick={handleDonate}
+                  />
+                )}
               </div>
             </div>
           </div>

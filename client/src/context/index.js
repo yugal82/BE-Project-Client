@@ -78,15 +78,41 @@ export const StateContextProvider = ({ children }) => {
       const filteredCampaigns = allCampaigns.filter((campaign) => campaign.owner === address);
       setIsUserCampaignsFetched(true);
       setUserCampaigns(filteredCampaigns);
-      return filteredCampaigns;
-    } catch (error) {}
+    } catch (error) {
+      return {
+        status: 'failure',
+        code: 400,
+        message: 'Error while fetching campaigns. Please refresh the page and try again.',
+      };
+    }
   };
 
   const donate = async (pId, amount) => {
-    const data = await contract.call('donateToCampaign', [pId], {
-      value: ethers.utils.parseEther(amount),
-    });
-    return data;
+    try {
+      const data = await contract.call('donateToCampaign', [pId], {
+        value: ethers.utils.parseEther(amount),
+      });
+      return {
+        status: 'success',
+        code: 200,
+        message: 'Funds donated successfully',
+        data,
+      };
+    } catch (error) {
+      if (error.reason === 'user rejected transaction') {
+        return {
+          status: 'failure',
+          code: 4001,
+          message: 'User rejected transaction',
+        };
+      } else {
+        return {
+          status: 'failure',
+          code: 400,
+          message: 'Something went wrong. Please try again',
+        };
+      }
+    }
   };
 
   const getDonations = async (pId) => {
