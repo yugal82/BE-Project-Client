@@ -7,7 +7,16 @@ const Profile = () => {
   const address = useAddress();
   const [isLoading, setIsLoading] = useState(false);
 
-  const { getUserNfts, userCreatedNfts, isUserNFTsFetched, getUserListedNfts, userListedNfts } = useStateContext();
+  const {
+    getUserNfts,
+    userCreatedNfts,
+    isUserNFTsFetched,
+    getUserListedNfts,
+    userListedNfts,
+    getUserCampaigns,
+    isUserCampaignsFetched,
+    userCampaigns,
+  } = useStateContext();
 
   const fetchUserNfts = async () => {
     setIsLoading(true);
@@ -20,12 +29,23 @@ const Profile = () => {
     if (address && !isUserNFTsFetched) fetchUserNfts();
   }, []);
 
+  const fetchUserCampaigns = async () => {
+    setIsLoading(true);
+    await getUserCampaigns();
+    setIsLoading(false);
+  };
+
+  useEffect(() => {
+    if (address && !isUserCampaignsFetched) fetchUserCampaigns();
+  }, []);
+
   return (
     <ProfileComponent
       userCreatedNfts={userCreatedNfts}
       userListedNfts={userListedNfts}
       isLoading={isLoading}
       address={address}
+      userCreatedCampaigns={userCampaigns}
     />
   );
 };

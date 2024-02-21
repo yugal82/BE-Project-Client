@@ -16,7 +16,7 @@ const CampaignDetails = React.lazy(() => import('./components/Crowdfunding/crowd
 
 export default function Home() {
   return (
-    <div className="bg-gray-900 text-white">
+    <div className="bg-gray-900 text-white ">
       <Routes>
         <Route
           exact

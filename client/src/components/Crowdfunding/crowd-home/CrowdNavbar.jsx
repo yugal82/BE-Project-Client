@@ -28,7 +28,7 @@ const CrowdNavbar = () => {
           )}
         </div>
         {menuOpen && (
-          <div className="absolute h-screen w-full bg-transparent backdrop-filter backdrop-blur-3xl sm:hidden">
+          <div className="absolute  h-screen w-full bg-transparent backdrop-filter backdrop-blur-3xl sm:hidden">
             <div className="w-full flex text-center justify-center pt-6">
               <ul className="w-full text-white">
                 <Link to="/crowdfunding/explore">

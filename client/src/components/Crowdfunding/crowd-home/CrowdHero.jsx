@@ -10,7 +10,7 @@ const CrowdHero = () => {
         </p>
       </div>
       <div>
-        <img className="rounded-2xl scale-90" src="./assets/crowd-banner.jpg" alt="" />
+        <img className="rounded-2xl  scale-90" src="./assets/crowd-banner.jpg" alt="" />
       </div>
     </div>
   );
