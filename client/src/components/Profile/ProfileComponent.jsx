@@ -9,7 +9,7 @@ import { Skeleton } from '../common/Skeleton';
 import { FaEthereum } from 'react-icons/fa6';
 import { Link } from 'react-router-dom';
 
-const ProfileComponent = ({ address, userCreatedNfts, isLoading, userListedNfts }) => {
+const ProfileComponent = ({ address, userCreatedNfts, isLoading, userListedNfts, userCreatedCampaigns }) => {
   const [tabIndex, setTabIndex] = useState(0);
   const getSelectedTabIndex = (tabIndex) => setTabIndex(tabIndex);
 
@@ -58,7 +58,9 @@ const ProfileComponent = ({ address, userCreatedNfts, isLoading, userListedNfts 
             <p className="py-1 px-2 bg-gray-600 text-white text-xs sm:text-sm rounded-lg mx-2">
               Listed Tokens: {userListedNfts?.length}
             </p>
-            <p className="py-1 px-2 bg-gray-600 text-white text-xs sm:text-sm rounded-lg">Created Campaigns: 0</p>
+            <p className="py-1 px-2 bg-gray-600 text-white text-xs sm:text-sm rounded-lg">
+              Created Campaigns: {userCreatedCampaigns?.length}
+            </p>
           </div>
         </div>
         <ProfileTabs
