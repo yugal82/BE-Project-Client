@@ -7,11 +7,17 @@ import NFTCard from '../../components/common/NFTCard';
 import { FiEdit2 } from 'react-icons/fi';
 import { Skeleton } from '../common/Skeleton';
 import { FaEthereum } from 'react-icons/fa6';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import FundCard from '../Crowdfunding/crowd-components/FundCard';
 
-const ProfileComponent = ({ address, userCreatedNfts, isLoading, userListedNfts, userCreatedCampaigns }) => {
+const ProfileComponent = ({ address, userCreatedNfts, isLoading, userListedNfts, userCampaigns }) => {
+  const navigate = useNavigate();
   const [tabIndex, setTabIndex] = useState(0);
+
   const getSelectedTabIndex = (tabIndex) => setTabIndex(tabIndex);
+
+  const handleNavigate = (campaign) =>
+    navigate(`/crowdfunding/campaigns-details/${campaign.title}`, { state: campaign });
 
   return (
     <div className="relative">
@@ -59,7 +65,7 @@ const ProfileComponent = ({ address, userCreatedNfts, isLoading, userListedNfts,
               Listed Tokens: {userListedNfts?.length}
             </p>
             <p className="py-1 px-2 bg-gray-600 text-white text-xs sm:text-sm rounded-lg">
-              Created Campaigns: {userCreatedCampaigns?.length}
+              Created Campaigns: {userCampaigns?.length}
             </p>
           </div>
         </div>
@@ -118,7 +124,27 @@ const ProfileComponent = ({ address, userCreatedNfts, isLoading, userListedNfts,
               )}
             </div>
           ) : (
-            <div>Crowdfunding Campaigns</div>
+            <div>
+              {isLoading === true ? (
+                <div className="grid grid-cols-1 gap-y-6 sm:gap-y-8 sm:grid-cols-2 gap-x-6 lg:grid-cols-4">
+                  {Skeleton(4)}
+                </div>
+              ) : (
+                <div>
+                  {userCampaigns?.length === 0 ? (
+                    <div className="w-full border-2 border-dashed border-gray-500 p-6 sm:p-12">
+                      <p className="text-base sm:text-xl">You have not created any campaigns yet.</p>
+                    </div>
+                  ) : (
+                    <div className="w-full grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6 mt-10">
+                      {userCampaigns?.map((campaign) => (
+                        <FundCard key={campaign.id} {...campaign} handleClick={() => handleNavigate(campaign)} />
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
           )}
         </div>
       </div>
