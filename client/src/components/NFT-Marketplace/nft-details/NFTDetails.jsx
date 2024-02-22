@@ -111,7 +111,9 @@ const NFTDetails = () => {
                   rel="noreferrer"
                   className="text-[#1d4ed8] cursor-pointer"
                 >
-                  {nft?.owner.substr(0, 5)}....{nft?.owner.substr(-5)}
+                  {isListed
+                    ? `${nft?.seller?.substr(0, 5)}....${nft?.seller?.substr(-5)}`
+                    : `${nft?.owner?.substr(0, 5)}....${nft?.owner?.substr(-5)}`}
                 </a>
               </p>
               <p className="py-2">Description - {nft?.description}</p>

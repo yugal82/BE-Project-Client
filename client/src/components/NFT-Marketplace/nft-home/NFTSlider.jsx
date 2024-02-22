@@ -21,7 +21,13 @@ const NFTSlider = ({ address }) => {
         <h2 className="text-2xl sm:text-3xl font-semibold text-white">Featured NFTs</h2>
       </div>
       <div className="mt-10">
-        <Slider address={address} marketListedTokens={marketListedTokens} />
+        {!marketListedTokens ? (
+          <div className="w-full flex items-center justify-center p-10">
+            <div className="w-20 h-20 animate-spin border-b-2 border-white rounded-full"></div>
+          </div>
+        ) : (
+          <Slider address={address} marketListedTokens={marketListedTokens} />
+        )}
       </div>
       <div className="mt-8 w-full flex items-center justify-center">
         <Link

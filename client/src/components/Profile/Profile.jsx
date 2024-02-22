@@ -25,10 +25,6 @@ const Profile = () => {
     setIsLoading(false);
   };
 
-  useEffect(() => {
-    if (address && !isUserNFTsFetched) fetchUserNfts();
-  }, []);
-
   const fetchUserCampaigns = async () => {
     setIsLoading(true);
     await getUserCampaigns();
@@ -36,6 +32,7 @@ const Profile = () => {
   };
 
   useEffect(() => {
+    if (address && !isUserNFTsFetched) fetchUserNfts();
     if (address && !isUserCampaignsFetched) fetchUserCampaigns();
   }, []);
 
@@ -45,7 +42,7 @@ const Profile = () => {
       userListedNfts={userListedNfts}
       isLoading={isLoading}
       address={address}
-      userCreatedCampaigns={userCampaigns}
+      userCampaigns={userCampaigns}
     />
   );
 };
