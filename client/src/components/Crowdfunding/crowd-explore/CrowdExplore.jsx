@@ -23,10 +23,10 @@ const CrowdExplore = () => {
   }, [address, contract]);
 
   return (
-    <div>
+    <div className="explore-page">
       <CrowdNavbar />
       <ExploreCampaigns title="All Campaigns" isLoading={isLoading} campaigns={campaigns} />
-      {/* <Footer /> */}
+      <Footer />
     </div>
   );
 };

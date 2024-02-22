@@ -6,8 +6,8 @@ import { Link } from 'react-router-dom';
 
 const Footer = () => {
   return (
-    <div className="bg-gray-800 rounded-t-2xl p-16 text-white">
-      <div className="md:flex md:items-center md:justify-between">
+    <div className="bg-gray-800 rounded-t-2xl p-16 text-white ">
+      <div className="md:flex md:items-center md:justify-between ">
         <div className="flex-col md:justify-between md:items-center">
           <div className="text-3xl md:text-4xl font-bold md:mb-0">DeKrypt</div>
           <div className="mt-2 text-base">

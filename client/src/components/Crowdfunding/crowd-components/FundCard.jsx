@@ -4,9 +4,12 @@ import { daysLeft } from '../../../utils';
 const FundCard = ({ owner, title, description, target, deadline, amountCollected, image, handleClick }) => {
   const remainingDays = daysLeft(deadline);
   return (
-    <div className="sm:w-[288px] w-full rounded-[15px] bg-[#1c1c24] cursor-pointer " onClick={handleClick}>
+    <div
+      className="sm:w-[288px] w-full rounded-[15px] bg-[#1c1c24] cursor-pointer overflow-hidden"
+      onClick={handleClick}
+    >
       <img src={image} alt="fund" className="w-full h-[170px] object-cover rounded-[15px]" />
-      <div className="flex flex-col p-4  ">
+      <div className="flex flex-col p-4 ">
         <div className="block">
           <h3 className=" font-semibold text-[16px] text-left leading-[26px] truncate text-white ">{title}</h3>
           <p className="mt-[5px]  font-normal text-[#808191] text-left leading-[18px] truncate ">{description}</p>

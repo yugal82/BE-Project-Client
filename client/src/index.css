@@ -10,3 +10,7 @@
   margin: 0;
   font-family: 'Inter', sans-serif;
 }
+
+.explore-page {
+  overflow: scroll;
+}
