@@ -91,7 +91,7 @@ const CampaignDetails = () => {
               <div className=" mt-[20px] flex-grow flex items-center gap-[14px] flex-wrap ">
                 <div>
                   <h4 className=" font-semibold text-[14px] text-white break-all ">{state.owner}</h4>
-                  <p className="mt-[4px]  font-normal text-[12px] text-[#808191] ">Support For a Cause</p>
+                  <p className="mt-[4px]  font-normal text-[12px] text-[#808191] ">{state.description}</p>
                 </div>
               </div>
             </div>
@@ -139,7 +139,7 @@ const CampaignDetails = () => {
                 </div>
                 {state?.owner === address ? (
                   <div className="text-white">
-                    <p>You are the creator of this campaign. You cannot donot yourself</p>
+                    <p>You are the creator of this campaign, you cannot donate to yourself.</p>
                   </div>
                 ) : (
                   <CustomButton

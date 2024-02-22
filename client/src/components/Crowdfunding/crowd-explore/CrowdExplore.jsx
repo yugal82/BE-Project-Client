@@ -26,7 +26,7 @@ const CrowdExplore = () => {
     <div>
       <CrowdNavbar />
       <ExploreCampaigns title="All Campaigns" isLoading={isLoading} campaigns={campaigns} />
-      <Footer />
+      {/* <Footer /> */}
     </div>
   );
 };
