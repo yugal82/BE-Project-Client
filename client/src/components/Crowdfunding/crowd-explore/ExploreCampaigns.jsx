@@ -11,7 +11,7 @@ const ExploreCampaigns = ({ title, isLoading, campaigns }) => {
   const currWidth = window.innerWidth;
 
   return (
-    <div className="h-screen px-10 py-6 md:px-28 md:py-10 overflow-scroll lg:overflow-visible ">
+    <div className="h-screen px-10 py-6 md:px-28 md:py-10 overflow-scroll overflow-x-hidden  lg:overflow-y-scroll lg:overflow-x-hidden ">
       <h1 className=" text-white font-semibold text-lg ">
         {title} ({campaigns.length})
       </h1>

@@ -14,3 +14,7 @@
 .explore-page {
   overflow: scroll;
 }
+
+#explore-page::-webkit-scrollbar {
+  display: none;
+}
