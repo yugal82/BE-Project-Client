@@ -37,6 +37,13 @@ const CreateCampaign = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (!address) {
+      setTxnError(true);
+      setTxnErrorMsg('Please connect to a wallet before creating a new token.');
+      resetForm();
+      return;
+    }
+
     checkIfImage(form.image, async (exists) => {
       if (exists) {
         setIsLoading(true);
