@@ -4,7 +4,7 @@ const FormField = ({ labelName, placeholder, inputType, isTextArea, value, handl
   return (
     <label className="w-full flex-1 flex flex-col">
       {labelName && (
-        <span className="font-medium text-[14px] leading-[22px] text-white mb-[10px]">
+        <span className="font-medium text-base text-white mb-2.5">
           {labelName} <span className="text-red-700">{isRequired ? '*' : ''}</span>
         </span>
       )}
@@ -16,7 +16,7 @@ const FormField = ({ labelName, placeholder, inputType, isTextArea, value, handl
           cols="30"
           rows={5}
           placeholder={placeholder}
-          className="p-4 sm:px-6 outline-none border border-gray-300 rounded-lg bg-transparent text-white text-base placeholder:text-[#4b5264] sm:min-w-[300px] resize-none"
+          className="p-4 sm:px-6 outline-none border border-gray-300 rounded-lg bg-transparent text-white text-base sm:min-w-[300px] resize-none"
         />
       ) : (
         <input
@@ -26,7 +26,7 @@ const FormField = ({ labelName, placeholder, inputType, isTextArea, value, handl
           type={inputType}
           step="0.1"
           placeholder={placeholder}
-          className="p-4 sm:px-6 outline-none border border-gray-300 rounded-lg bg-transparent text-white text-base placeholder:text-[#4b5264] sm:min-w-[300px]"
+          className="p-4 sm:px-6 outline-none border border-gray-300 rounded-lg bg-transparent text-white text-base sm:min-w-[300px]"
         />
       )}
     </label>
