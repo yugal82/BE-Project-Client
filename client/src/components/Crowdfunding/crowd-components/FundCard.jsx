@@ -5,33 +5,29 @@ const FundCard = ({ owner, title, description, target, deadline, amountCollected
   const remainingDays = daysLeft(deadline);
   return (
     <div
-      className="sm:w-[288px] w-full rounded-[15px] bg-[#1c1c24] cursor-pointer overflow-hidden"
+      className="sm:w-72 w-full rounded-2xl cursor-pointer overflow-hidden border border-gray-700 hover:scale-105 transition-all ease-in-out duration-300 shadow-sm shadow-gray-700"
       onClick={handleClick}
     >
-      <img src={image} alt="fund" className="w-full h-[170px] object-cover rounded-[15px]" />
-      <div className="flex flex-col p-4 ">
+      <img src={image} alt="fund" className="w-full h-44 object-cover rounded-2xl" />
+      <div className="flex flex-col p-4">
         <div className="block">
-          <h3 className=" font-semibold text-[16px] text-left leading-[26px] truncate text-white ">{title}</h3>
-          <p className="mt-[5px]  font-normal text-[#808191] text-left leading-[18px] truncate ">{description}</p>
+          <h3 className=" font-semibold text-base text-left truncate text-white">{title}</h3>
+          <p className="mt-1 font-normal text-gray-500 text-left truncate">{description}</p>
         </div>
         <div>
-          <div className="flex gap-2 justify-between mt-[15px] flex-wrap">
+          <div className="flex gap-2 justify-between mt-4 flex-wrap">
             <div className="flex flex-col ">
-              <h4 className=" text-[#b2b3bd] leading-[22px] font-semibold text-[14px]">{amountCollected}</h4>
-              <p className="mt-[3px]  font-normal text-[12px] text-[#808091] leading-[18px] sm:max-w-[120px] truncate  ">
-                Raised of {target}
-              </p>
+              <h4 className=" text-gray-400 font-semibold text-base">{amountCollected}</h4>
+              <p className="mt-1 font-normal text-sm text-[#808091] sm:max-w-32">Raised of {target}</p>
             </div>
-            <div className="flex flex-col ">
-              <h4 className=" text-[#b2b3bd] leading-[22px] font-semibold text-[14px]">{remainingDays}</h4>
-              <p className="mt-[3px]  font-normal text-[12px] text-[#808091] leading-[18px] sm:max-w-[120px] truncate  ">
-                Day(s) left
-              </p>
+            <div className="flex flex-col">
+              <h4 className=" text-gray-400 font-semibold text-base">{remainingDays}</h4>
+              <p className="mt-1 font-normal text-sm text-gray-400 sm:max-w-30">Day(s) left</p>
             </div>
           </div>
         </div>
-        <div className="flex items-center mt-[20px] gap-[12px]">
-          <p className="flex-1  font-normal text-[12px] text-[#808191] truncate">
+        <div className="flex items-center mt-5 gap-3">
+          <p className="flex-1 font-normal text-sm text-[#808191]">
             by{' '}
             <span className="text-[#b2b2bd] ">
               {owner?.substr(0, 5)}...{owner?.substr(-5)}

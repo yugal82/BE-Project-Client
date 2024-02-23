@@ -37,6 +37,13 @@ const CreateCampaign = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (!address) {
+      setTxnError(true);
+      setTxnErrorMsg('Please connect to a wallet before creating a new token.');
+      resetForm();
+      return;
+    }
+
     checkIfImage(form.image, async (exists) => {
       if (exists) {
         setIsLoading(true);
@@ -77,7 +84,7 @@ const CreateCampaign = () => {
   };
 
   return (
-    <div className=" flex justify-center items-center flex-col rounded-[10px] sm:p-10 p-4 my-6 mx-2 md:mx-16  md:my-12 ">
+    <div className="flex justify-center items-center flex-col rounded-lg sm:p-10 p-4 my-6 mx-2 md:mx-16  md:my-12 ">
       {!address && <ConnectWalletPopup />}
       {isLoading && <LoadingAnimation message={'Please wait while we are creating your crowdfunding campaign.'} />}
       {txnError && <ErrorPopup message={txnErrorMsg} setTxnError={setTxnError} />}
@@ -90,8 +97,8 @@ const CreateCampaign = () => {
           <span className="text-red-700">*</span> Required fields
         </span>
       </div>
-      <form action="" onSubmit={handleSubmit} className="w-full mt-[65px] flex flex-col gap-[30px]">
-        <div className="flex flex-wrap gap-[40px]">
+      <form action="" onSubmit={handleSubmit} className="w-full mt-16 flex flex-col gap-8">
+        <div className="flex flex-wrap gap-10">
           <FormField
             labelName="Your Name"
             placeholder="John Doe"
@@ -117,13 +124,11 @@ const CreateCampaign = () => {
           handleChange={(e) => handleFormFieldChange('description', e)}
           isRequired={true}
         />
-        <div className="flex bg-[#1d4ed8] h-[120px] rounded-[10px] p-6 w-full justify-start items-center">
-          <img src={Money} alt="Bannerimage" className=" w-[40px] h-[40px] object-contain" />
-          <h4 className="font-bold text-xl sm:text-2xl text-white ml-[20px] ">
-            You will get 100% of the raised amount.
-          </h4>
+        <div className="flex bg-[#1d4ed8] rounded-lg py-8 px-6 w-full justify-start items-center">
+          <img src={Money} alt="Bannerimage" className=" w-10 h-10" />
+          <h4 className="font-bold text-xl sm:text-2xl text-white ml-5">You will get 100% of the raised amount.</h4>
         </div>
-        <div className="flex flex-wrap gap-[40px]">
+        <div className="flex flex-wrap gap-10">
           <FormField
             labelName="Goal"
             placeholder="ETH 0.50"
