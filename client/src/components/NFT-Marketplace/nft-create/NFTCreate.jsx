@@ -56,6 +56,8 @@ const NFTCreate = () => {
     if (!imgFile) setImgFileError(true);
     if (!priceRef.current.value) setPriceError(true);
 
+    const filteredProperties = filterProperties(properties);
+
     // if all input filled, then create a new NFT.
     if (isValidDesc(descriptionRef.current.value) && isValidItemName(itemNameRef.current.value) && imgFile) {
       if (!address) {
@@ -76,7 +78,7 @@ const NFTCreate = () => {
           itemNameRef,
           externalLinkRef,
           descriptionRef,
-          properties,
+          filteredProperties,
           imageIPFS?.imageIPFS
         );
       } else {
@@ -161,6 +163,11 @@ const NFTCreate = () => {
     const currentProperties = [...properties];
     currentProperties[index][e.target.name] = e.target.value;
     setProperties(currentProperties);
+  };
+
+  const filterProperties = (properties) => {
+    const filteredProperties = properties?.filter((property) => property?.trait !== '' && property?.value !== '');
+    return filteredProperties;
   };
 
   return (
