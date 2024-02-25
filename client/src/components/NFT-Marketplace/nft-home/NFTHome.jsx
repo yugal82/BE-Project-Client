@@ -6,6 +6,7 @@ import NFTHero from './NFTHero';
 import Footer from '../../common/Footer/Footer';
 import NFTService from './NFTService';
 import NFTSlider from './NFTSlider';
+import Features from '../../Home/Features/Features';
 
 const NFTHome = () => {
   const address = useAddress();
@@ -17,6 +18,7 @@ const NFTHome = () => {
       <NFTHero />
       <NFTSlider address={address} />
       <NFTService />
+      <Features />
       <Footer />
     </div>
   );
