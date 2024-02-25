@@ -9,7 +9,7 @@ const CrowdCreate = () => {
     <div className="">
       <CrowdNavbar />
       <CreateCampaign />
-      <CrowdService />
+      {/* <CrowdService /> */}
       <Footer />
     </div>
   );

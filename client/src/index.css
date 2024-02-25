@@ -10,11 +10,3 @@
   margin: 0;
   font-family: 'Inter', sans-serif;
 }
-
-.explore-page {
-  overflow: scroll;
-}
-
-#explore-page::-webkit-scrollbar {
-  display: none;
-}

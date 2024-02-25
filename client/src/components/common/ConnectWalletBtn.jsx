@@ -1,5 +1,6 @@
-import React from 'react';
-import { ConnectWallet, darkTheme } from '@thirdweb-dev/react';
+import React, { useEffect } from 'react';
+import { ConnectWallet, darkTheme, useAddress, useConnectionStatus } from '@thirdweb-dev/react';
+import { signup } from '../../api/nft-marketplace-api';
 
 const customDarkTheme = darkTheme({
   fontFamily: 'Inter, sans-serif',
@@ -13,6 +14,31 @@ const customDarkTheme = darkTheme({
 });
 
 const ConnectWalletBtn = () => {
+  const address = useAddress();
+  const connectionStatus = useConnectionStatus();
+
+  const registerUser = async (address) => {
+    try {
+      localStorage.setItem('walletDetails', address);
+      const response = await signup(address);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    const walletDetails = localStorage.getItem('walletDetails');
+    if (walletDetails !== address) {
+      if (
+        address &&
+        address !== walletDetails &&
+        (connectionStatus !== 'disconnected' || connectionStatus !== 'connecting')
+      ) {
+        registerUser(address);
+      }
+    }
+  }, [connectionStatus, address]);
+
   return (
     <ConnectWallet
       theme={customDarkTheme}
