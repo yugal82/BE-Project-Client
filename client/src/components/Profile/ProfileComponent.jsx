@@ -9,10 +9,22 @@ import { Skeleton } from '../common/Skeleton';
 import { FaEthereum } from 'react-icons/fa6';
 import { Link, useNavigate } from 'react-router-dom';
 import FundCard from '../Crowdfunding/crowd-components/FundCard';
+import EditPopup from '../common/popup/EditPopup';
+import LoadingAnimation from '../common/LoadingAnimation';
 
-const ProfileComponent = ({ address, userCreatedNfts, isLoading, userListedNfts, userCampaigns }) => {
+const ProfileComponent = ({
+  address,
+  userCreatedNfts,
+  isLoading,
+  userListedNfts,
+  userCampaigns,
+  userDetails,
+  setSuccess,
+}) => {
   const navigate = useNavigate();
   const [tabIndex, setTabIndex] = useState(0);
+  const [isEditPopupOpen, setIsEditPopupOpen] = useState(false);
+  const [isUpdateLoading, setIsUpdateLoading] = useState(false);
 
   const getSelectedTabIndex = (tabIndex) => setTabIndex(tabIndex);
 
@@ -22,20 +34,25 @@ const ProfileComponent = ({ address, userCreatedNfts, isLoading, userListedNfts,
   return (
     <div className="relative">
       <Navbar />
-      {!address && <ConnectWalletPopup />}
+      {!address && <ConnectWalletPopup address={address} />}
+      {isEditPopupOpen && (
+        <EditPopup
+          setIsEditPopupOpen={setIsEditPopupOpen}
+          address={address}
+          setIsUpdateLoading={setIsUpdateLoading}
+          setSuccess={setSuccess}
+        />
+      )}
+      {isUpdateLoading && <LoadingAnimation message={'Please wait while we update your details.'} />}
       <div className="banner-and-small-logo relative -top-28">
-        <div className="w-full bg-gray-50 text-gray-700">
-          <img
-            className="w-full h-72"
-            src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=2073&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-            alt=""
-          />
+        <div className="w-full bg-gray-600 border-none cursor-pointer">
+          <img className="w-full h-72 bg-black hover:opacity-50" src={userDetails?.bannerImage} alt="banner-image" />
         </div>
-        <div className="absolute -bottom-4 left-4 sm:left-10 w-40 h-40">
+        <div className="absolute -bottom-4 left-4 sm:left-10 w-40 h-40 bg-gray-600 rounded-[50%]">
           <img
-            className="rounded-[50%] w-full h-full border-2 border-white"
-            src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=2073&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-            alt=""
+            className="rounded-[50%] w-full h-full bg-black hover:opacity-50"
+            src={userDetails?.profileImage}
+            alt="profile-image"
           />
         </div>
       </div>
@@ -43,8 +60,8 @@ const ProfileComponent = ({ address, userCreatedNfts, isLoading, userListedNfts,
         <div className="mb-10">
           <div>
             <div className="flex items-center justify-between">
-              <span className="text-2xl font-semibold">Unnamed</span>
-              <button className="bg-[#1D4ED8] rounded-full p-2">
+              <span className="text-2xl font-semibold">{userDetails?.name}</span>
+              <button onClick={() => setIsEditPopupOpen(true)} className="bg-[#1D4ED8] rounded-full p-2">
                 <FiEdit2 />
               </button>
             </div>
@@ -55,6 +72,9 @@ const ProfileComponent = ({ address, userCreatedNfts, isLoading, userListedNfts,
                   {address.substr(0, 5).toLowerCase()}...{address.substr(-5).toLowerCase()}
                 </p>
               )}
+            </div>
+            <div className="mt-2">
+              <span className="text-base text-gray-500 font-medium">{userDetails?.bio}</span>
             </div>
           </div>
           <div className="flex items-center justify-start mt-4">

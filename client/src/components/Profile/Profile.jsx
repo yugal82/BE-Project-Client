@@ -2,10 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { useAddress } from '@thirdweb-dev/react';
 import { useStateContext } from '../../context';
 import ProfileComponent from './ProfileComponent';
+import { getUserInfo } from '../../api/nft-marketplace-api';
 
 const Profile = () => {
   const address = useAddress();
   const [isLoading, setIsLoading] = useState(false);
+  const [userDetails, setUserDetails] = useState();
+  const [success, setSuccess] = useState(false);
 
   const {
     getUserNfts,
@@ -31,10 +34,16 @@ const Profile = () => {
     setIsLoading(false);
   };
 
+  const getUserDetials = async (address) => {
+    const res = await getUserInfo(address);
+    setUserDetails(res?.data?.data);
+  };
+
   useEffect(() => {
     if (address && !isUserNFTsFetched) fetchUserNfts();
     if (address && !isUserCampaignsFetched) fetchUserCampaigns();
-  }, []);
+    if (address) getUserDetials(address);
+  }, [success]);
 
   return (
     <ProfileComponent
@@ -43,6 +52,8 @@ const Profile = () => {
       isLoading={isLoading}
       address={address}
       userCampaigns={userCampaigns}
+      userDetails={userDetails}
+      setSuccess={setSuccess}
     />
   );
 };
