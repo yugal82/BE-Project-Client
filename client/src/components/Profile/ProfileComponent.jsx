@@ -60,7 +60,7 @@ const ProfileComponent = ({
         <div className="mb-10">
           <div>
             <div className="flex items-center justify-between">
-              <span className="text-2xl font-semibold">{userDetails?.name}</span>
+              <span className="text-2xl font-semibold">{userDetails?.name || 'Unnamed'}</span>
               <button onClick={() => setIsEditPopupOpen(true)} className="bg-[#1D4ED8] rounded-full p-2">
                 <FiEdit2 />
               </button>
@@ -74,7 +74,7 @@ const ProfileComponent = ({
               )}
             </div>
             <div className="mt-2">
-              <span className="text-base text-gray-500 font-medium">{userDetails?.bio}</span>
+              <span className="text-base text-gray-500 font-medium">{userDetails?.bio || ''}</span>
             </div>
           </div>
           <div className="flex items-center justify-start mt-4">
