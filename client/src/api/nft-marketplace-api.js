@@ -7,6 +7,7 @@ import { ethers } from 'ethers';
 const pinata_jwt = `Bearer ${process.env.REACT_APP_PINATA_JWT}`;
 
 const BACKEND_BASE_URL = 'http://localhost:8080/';
+const BACKEND_BASE_URL_REMOTE = 'https://dekrypt-api.vercel.app/';
 
 export const uploadImgToIPFS = async (image) => {
   const pinataUrl = 'https://api.pinata.cloud/pinning/pinFileToIPFS';
@@ -175,7 +176,7 @@ const mapNftData = (ipfsMetadata, nft) => {
 // ------------------------- BACKEND API ------------------------
 export const getUserInfo = async (address) => {
   try {
-    const url = `${BACKEND_BASE_URL}user/${address}`;
+    const url = `${BACKEND_BASE_URL_REMOTE}user/${address}`;
     const user = await axios.get(url);
     return {
       status: user?.data?.status,
@@ -193,7 +194,7 @@ export const getUserInfo = async (address) => {
 
 export const signup = async (address) => {
   try {
-    const url = `${BACKEND_BASE_URL}signup/`;
+    const url = `${BACKEND_BASE_URL_REMOTE}signup/`;
     const data = {
       headers: {
         'Content-Type': 'application/json',
@@ -213,7 +214,7 @@ export const signup = async (address) => {
 
 export const updateUserInfo = async (userData, address) => {
   try {
-    const url = `${BACKEND_BASE_URL}update-user/${address}`;
+    const url = `${BACKEND_BASE_URL_REMOTE}update-user/${address}`;
     const headers = {
       'Content-Type': 'application/json',
       'Access-Control-Allow-Origin': '*',
