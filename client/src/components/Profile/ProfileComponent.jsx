@@ -46,13 +46,13 @@ const ProfileComponent = ({
       {isUpdateLoading && <LoadingAnimation message={'Please wait while we update your details.'} />}
       <div className="banner-and-small-logo relative -top-28">
         <div className="w-full bg-gray-600 border-none cursor-pointer">
-          <img className="w-full h-72 bg-black hover:opacity-50" src={userDetails?.bannerImage} alt="banner-image" />
+          <img className="w-full h-72 bg-black hover:opacity-50" src={userDetails?.bannerImage} alt="banner" />
         </div>
         <div className="absolute -bottom-4 left-4 sm:left-10 w-40 h-40 bg-gray-600 rounded-[50%]">
           <img
             className="rounded-[50%] w-full h-full bg-black hover:opacity-50"
             src={userDetails?.profileImage}
-            alt="profile-image"
+            alt="profile"
           />
         </div>
       </div>

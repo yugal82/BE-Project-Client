@@ -20,7 +20,7 @@ const ConnectWalletBtn = () => {
   const registerUser = async (address) => {
     try {
       localStorage.setItem('walletDetails', address);
-      const response = await signup(address);
+      await signup(address);
     } catch (error) {
       console.log(error);
     }

@@ -8,7 +8,7 @@ const ExploreCampaigns = ({ title, isLoading, campaigns }) => {
     navigate(`/crowdfunding/campaigns-details/${campaign.title}`, { state: campaign });
   };
 
-  const currWidth = window.innerWidth;
+  // const currWidth = window.innerWidth;
 
   return (
     <div className="h-screen px-10 py-6 md:px-28 md:py-10 ">

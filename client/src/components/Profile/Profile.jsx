@@ -43,7 +43,7 @@ const Profile = () => {
     if (address && !isUserNFTsFetched) fetchUserNfts();
     if (address && !isUserCampaignsFetched) fetchUserCampaigns();
     if (address) getUserDetials(address);
-  }, [success]);
+  }, [success, address, isUserNFTsFetched, isUserCampaignsFetched]);
 
   return (
     <ProfileComponent

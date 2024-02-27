@@ -10,13 +10,13 @@ import { StateContextProvider } from './context';
 const container = document.getElementById('root');
 const root = createRoot(container);
 root.render(
-  <React.StrictMode>
-    <ThirdwebProvider activeChain={Sepolia} clientId={process.env.REACT_APP_THIRDWEB_API_KEY}>
-      <BrowserRouter>
-        <StateContextProvider>
-          <App />
-        </StateContextProvider>
-      </BrowserRouter>
-    </ThirdwebProvider>
-  </React.StrictMode>
+  // <React.StrictMode>
+  <ThirdwebProvider activeChain={Sepolia} clientId={process.env.REACT_APP_THIRDWEB_API_KEY}>
+    <BrowserRouter>
+      <StateContextProvider>
+        <App />
+      </StateContextProvider>
+    </BrowserRouter>
+  </ThirdwebProvider>
+  // </React.StrictMode>
 );

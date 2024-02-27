@@ -26,7 +26,7 @@ const NFTDetails = () => {
   const location = useLocation();
   const nft = location?.state?.nft;
 
-  const owner = nft?.owner;
+  // const owner = nft?.owner;
   const seller = nft?.seller;
   const isListed = nft?.isListed;
 
