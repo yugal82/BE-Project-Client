@@ -2,11 +2,10 @@
 
 import axios from 'axios';
 import { getNFTMarketplaceContractObject } from '../utils/contract';
-import { walletConnect } from '@thirdweb-dev/react';
 import { ethers } from 'ethers';
 const pinata_jwt = `Bearer ${process.env.REACT_APP_PINATA_JWT}`;
 
-const BACKEND_BASE_URL = 'http://localhost:8080/';
+// const BACKEND_BASE_URL = 'http://localhost:8080/';
 const BACKEND_BASE_URL_REMOTE = 'https://dekrypt-api.vercel.app/';
 
 export const uploadImgToIPFS = async (image) => {

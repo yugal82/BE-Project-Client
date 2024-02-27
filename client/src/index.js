@@ -1,9 +1,8 @@
 import React from 'react';
 import { Sepolia } from '@thirdweb-dev/chains';
-import { ThirdwebSDK } from '@thirdweb-dev/sdk';
 import { createRoot } from 'react-dom/client';
 import App from './App';
-import { ChainId, ThirdwebProvider } from '@thirdweb-dev/react';
+import { ThirdwebProvider } from '@thirdweb-dev/react';
 import { BrowserRouter } from 'react-router-dom';
 
 import { StateContextProvider } from './context';
