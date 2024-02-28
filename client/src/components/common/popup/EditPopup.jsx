@@ -54,6 +54,7 @@ const EditPopup = ({ setIsEditPopupOpen, address, setIsUpdateLoading, setSuccess
     const res = await updateUserInfo(userData, address);
     if (res?.status === 200) {
       setSuccess(true);
+      window.location.reload();
     } else {
       alert('Something went wrong. Please try again');
     }

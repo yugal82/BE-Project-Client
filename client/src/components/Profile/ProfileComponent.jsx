@@ -20,6 +20,7 @@ const ProfileComponent = ({
   userCampaigns,
   userDetails,
   setSuccess,
+  isUserDataFetchLoading,
 }) => {
   const navigate = useNavigate();
   const [tabIndex, setTabIndex] = useState(0);
@@ -45,14 +46,20 @@ const ProfileComponent = ({
       )}
       {isUpdateLoading && <LoadingAnimation message={'Please wait while we update your details.'} />}
       <div className="banner-and-small-logo relative -top-28">
-        <div className="w-full bg-gray-600 border-none cursor-pointer">
-          <img className="w-full h-72 bg-black hover:opacity-50" src={userDetails?.bannerImage} alt="banner" />
+        <div className="w-full bg-gray-600 border-none cursor-pointer backdrop-filter blur-sm">
+          <img
+            className={`w-full h-72 ${
+              isUserDataFetchLoading ? 'animate-pulse bg-gray-300' : 'hover:bg-black hover:opacity-50'
+            } `}
+            src={userDetails?.bannerImage}
+          />
         </div>
         <div className="absolute -bottom-4 left-4 sm:left-10 w-40 h-40 bg-gray-600 rounded-[50%]">
           <img
-            className="rounded-[50%] w-full h-full bg-black hover:opacity-50"
+            className={`rounded-[50%] w-full h-full ${
+              isUserDataFetchLoading ? 'animate-pulse bg-gray-300' : 'hover:bg-black hover:opacity-50'
+            }`}
             src={userDetails?.profileImage}
-            alt="profile"
           />
         </div>
       </div>

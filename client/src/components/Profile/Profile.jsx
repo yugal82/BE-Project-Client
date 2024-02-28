@@ -2,13 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { useAddress } from '@thirdweb-dev/react';
 import { useStateContext } from '../../context';
 import ProfileComponent from './ProfileComponent';
-import { getUserInfo } from '../../api/nft-marketplace-api';
 
 const Profile = () => {
   const address = useAddress();
   const [isLoading, setIsLoading] = useState(false);
-  const [userDetails, setUserDetails] = useState();
   const [success, setSuccess] = useState(false);
+  const [isUserDataFetchLoading, setIsUserDataFetchLoading] = useState(false);
 
   const {
     getUserNfts,
@@ -19,6 +18,9 @@ const Profile = () => {
     getUserCampaigns,
     isUserCampaignsFetched,
     userCampaigns,
+    getUserDetails,
+    userDetails,
+    isUserDetailsFetched,
   } = useStateContext();
 
   const fetchUserNfts = async () => {
@@ -34,15 +36,16 @@ const Profile = () => {
     setIsLoading(false);
   };
 
-  const getUserDetials = async (address) => {
-    const res = await getUserInfo(address);
-    setUserDetails(res?.data?.data);
+  const fetchUserData = async (address) => {
+    setIsUserDataFetchLoading(true);
+    await getUserDetails(address);
+    setIsUserDataFetchLoading(false);
   };
 
   useEffect(() => {
     if (address && !isUserNFTsFetched) fetchUserNfts();
     if (address && !isUserCampaignsFetched) fetchUserCampaigns();
-    if (address) getUserDetials(address);
+    if (address && !isUserDetailsFetched) fetchUserData(address);
   }, [success, address, isUserNFTsFetched, isUserCampaignsFetched]);
 
   return (
@@ -54,6 +57,7 @@ const Profile = () => {
       userCampaigns={userCampaigns}
       userDetails={userDetails}
       setSuccess={setSuccess}
+      isUserDataFetchLoading={isUserDataFetchLoading}
     />
   );
 };
