@@ -2,7 +2,7 @@ import { React, useContext, createContext, useState } from 'react';
 import { useAddress, useContract, useMetamask, useContractWrite } from '@thirdweb-dev/react';
 import { ethers } from 'ethers';
 import { getNFTMarketplaceContractObject } from '../utils/contract';
-import { fetchDataOfItemFromIPFS } from '../api/nft-marketplace-api';
+import { fetchDataOfItemFromIPFS, getUserInfo } from '../api/nft-marketplace-api';
 
 const StateContext = createContext();
 
@@ -14,6 +14,8 @@ export const StateContextProvider = ({ children }) => {
   const [isMarketItemsFetched, setIsMarketItemsFetched] = useState(false);
   const [isUserCampaignsFetched, setIsUserCampaignsFetched] = useState(false);
   const [userCampaigns, setUserCampaigns] = useState([]);
+  const [userDetails, setUserDetails] = useState();
+  const [isUserDetailsFetched, setIsUserDetailsFetched] = useState(false);
 
   const { contract } = useContract('0x27Edf40a51A6726cd7ee742453ce8947EEB7A76d');
 
@@ -193,6 +195,12 @@ export const StateContextProvider = ({ children }) => {
     }
   };
 
+  const getUserDetails = async (address) => {
+    const res = await getUserInfo(address);
+    setIsUserDetailsFetched(true);
+    setUserDetails(res?.data?.data);
+  };
+
   return (
     <StateContext.Provider
       value={{
@@ -216,6 +224,10 @@ export const StateContextProvider = ({ children }) => {
         marketListedTokens,
         isMarketItemsFetched,
         setIsMarketItemsFetched,
+        getUserDetails,
+        userDetails,
+        setIsUserDetailsFetched,
+        isUserDetailsFetched,
       }}
     >
       {children}

@@ -2,9 +2,11 @@
 
 import axios from 'axios';
 import { getNFTMarketplaceContractObject } from '../utils/contract';
-import { walletConnect } from '@thirdweb-dev/react';
 import { ethers } from 'ethers';
 const pinata_jwt = `Bearer ${process.env.REACT_APP_PINATA_JWT}`;
+
+// const BACKEND_BASE_URL = 'http://localhost:8080/';
+const BACKEND_BASE_URL_REMOTE = 'https://dekrypt-api.vercel.app/';
 
 export const uploadImgToIPFS = async (image) => {
   const pinataUrl = 'https://api.pinata.cloud/pinning/pinFileToIPFS';
@@ -168,4 +170,57 @@ const mapNftData = (ipfsMetadata, nft) => {
   };
 
   return mappedNftData;
+};
+
+// ------------------------- BACKEND API ------------------------
+export const getUserInfo = async (address) => {
+  try {
+    const url = `${BACKEND_BASE_URL_REMOTE}user/${address}`;
+    const user = await axios.get(url);
+    return {
+      status: user?.data?.status,
+      message: user?.data?.message,
+      data: user?.data,
+    };
+  } catch (error) {
+    return {
+      status: 'failure',
+      message: 'Something went wrong. Please try again',
+      code: 400,
+    };
+  }
+};
+
+export const signup = async (address) => {
+  try {
+    const url = `${BACKEND_BASE_URL_REMOTE}signup/`;
+    const data = {
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+      },
+    };
+    const user = await axios.post(url, { address: address }, data);
+    return user;
+  } catch (error) {
+    return {
+      status: 'failure',
+      message: error?.response?.data?.message,
+      code: 400,
+    };
+  }
+};
+
+export const updateUserInfo = async (userData, address) => {
+  try {
+    const url = `${BACKEND_BASE_URL_REMOTE}update-user/${address}`;
+    const headers = {
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': '*',
+    };
+    const response = await axios.patch(url, userData, { headers });
+    return response;
+  } catch (error) {
+    return { status: 'failure', message: error?.response?.data?.message, code: 400 };
+  }
 };

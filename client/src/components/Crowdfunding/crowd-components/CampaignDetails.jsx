@@ -65,13 +65,13 @@ const CampaignDetails = () => {
           <div className="w-full flex md:flex-row flex-col mt-10 gap-8">
             <div className="flex justify-center p-4 items-center flex-col">
               <div className="w-full">
-                <img src={state.image} alt="" className="w-full lg:min-w-[840px] rounded-xl" />
+                <img src={state?.image} alt="" className="w-full lg:min-w-[840px] rounded-xl" />
               </div>
               <div className="relative w-full rounded-md h-1 bg-[#3a3a43] mt-2">
                 <div
                   className="absolute rounded-md h-full bg-[#34b8f0]"
                   style={{
-                    width: `${calculateBarPercentage(state.target, state.amountCollected)}%`,
+                    width: `${calculateBarPercentage(state?.target, state?.amountCollected)}%`,
                     maxWidth: '100',
                   }}
                 ></div>
@@ -79,7 +79,7 @@ const CampaignDetails = () => {
             </div>
             <div className="flex md:w-40 w-full flex-wrap justify-around md:justify-center md:items-center gap-8 md:gap-0">
               <CountBox title="Days left" value={remainingDays} />
-              <CountBox title={`Raised of ${state.target}`} value={state.amountCollected} />
+              <CountBox title={`Raised of ${state?.target}`} value={state?.amountCollected} />
               <CountBox title="Total Backers" value={donators.length} />
             </div>
           </div>
@@ -89,8 +89,8 @@ const CampaignDetails = () => {
                 <h4 className="font-epilogue font-semibold text-base text-white uppercase">Creator</h4>
                 <div className=" mt-5 flex-grow flex items-center gap-3 flex-wrap ">
                   <div>
-                    <h4 className="font-semibold text-base text-white break-all ">{state.owner}</h4>
-                    <p className="mt-1 font-normal text-base text-gray-400">{state.description}</p>
+                    <h4 className="font-semibold text-base text-white break-all ">{state?.owner}</h4>
+                    <p className="mt-1 font-normal text-base text-gray-400">{state?.description}</p>
                   </div>
                 </div>
               </div>
@@ -100,13 +100,13 @@ const CampaignDetails = () => {
                   {donators.length > 0 ? (
                     donators.map((item, index) => (
                       <div
-                        key={`${item.donator}-${index}`}
+                        key={`${item?.donator}-${index}`}
                         className="flex justify-between md:justify-start md:gap-8 items-center gap-4"
                       >
                         <p className="font-medium text-sm text-gray-400">
-                          {index + 1}. {item.donator}
+                          {index + 1}. {item?.donator.substr(0, 6)}...{item?.donator.substr(-6)}
                         </p>
-                        <p className="font-normal text-base text-gray-400 break-all">{item.donation}</p>
+                        <p className="font-normal text-base text-gray-400 break-all">{item?.donation} ETH</p>
                       </div>
                     ))
                   ) : (

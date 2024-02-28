@@ -19,7 +19,7 @@ const NFTCard = ({ nft, address }) => {
       className="p-2 border border-gray-700 rounded-lg cursor-pointer hover:scale-105 transition-all ease-in-out duration-300 shadow-sm shadow-gray-700"
     >
       <div className="p-1">
-        <img className="w-full min-h-60 bg-gray-400 rounded-lg" src={nft?.media} alt="nft-image" />
+        <img className="w-full min-h-60 bg-gray-400 rounded-lg" src={nft?.media} alt="nft" />
       </div>
       <div className="p-2">
         <p className="text-sm">{nft?.name}</p>
