@@ -160,7 +160,7 @@ const ProfileComponent = ({
                 <div>
                   {userCampaigns?.length === 0 ? (
                     <div className="w-full border-2 border-dashed border-gray-500 p-6 sm:p-12">
-                      <p className="text-base sm:text-xl">You have not created any campaigns yet.</p>
+                      <p className="text-base sm:text-xl">You have no active campaigns yet.</p>
                     </div>
                   ) : (
                     <div className="w-full grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6 mt-10">

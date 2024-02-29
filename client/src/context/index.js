@@ -3,7 +3,6 @@ import { useAddress, useContract, useMetamask, useContractWrite } from '@thirdwe
 import { ethers } from 'ethers';
 import { getNFTMarketplaceContractObject } from '../utils/contract';
 import { fetchDataOfItemFromIPFS, getUserInfo } from '../api/nft-marketplace-api';
-import { all } from 'axios';
 
 const StateContext = createContext();
 
@@ -17,6 +16,8 @@ export const StateContextProvider = ({ children }) => {
   const [userCampaigns, setUserCampaigns] = useState([]);
   const [userDetails, setUserDetails] = useState();
   const [isUserDetailsFetched, setIsUserDetailsFetched] = useState(false);
+  const [exploreCampaigns, setExploreCampaigns] = useState([]);
+  const [isExploreCampaignsFetched, setIsExploreCampaignsFetched] = useState(false);
 
   const { contract } = useContract('0x27Edf40a51A6726cd7ee742453ce8947EEB7A76d');
 
@@ -73,25 +74,10 @@ export const StateContextProvider = ({ children }) => {
       image: campaign.image,
       pId: i,
     }));
-    return parsedCampaigns;
-  };
 
-  const getActiveCampaigns = async () => {
-    const campaigns = await contract.call('getCampaigns');
-
-    // console.log(campaigns);
-    const allCampaigns = campaigns.map((campaign, i) => ({
-      owner: campaign.owner,
-      title: campaign.title,
-      description: campaign.description,
-      target: ethers.utils.formatEther(campaign.target.toString()),
-      deadline: campaign.deadline.toNumber(),
-      amountCollected: ethers.utils.formatEther(campaign.amountCollected.toString()),
-      image: campaign.image,
-      pId: i,
-    }));
-
-    const activeCampaigns = allCampaigns.filter((i) => i.deadline > date);
+    const activeCampaigns = getActiveCampaigns(parsedCampaigns);
+    setIsExploreCampaignsFetched(true);
+    setExploreCampaigns(activeCampaigns);
     return activeCampaigns;
   };
 
@@ -100,8 +86,9 @@ export const StateContextProvider = ({ children }) => {
       const allCampaigns = await getCampaigns();
 
       const filteredCampaigns = allCampaigns.filter((campaign) => campaign.owner === address);
+      const activeUserCampaigns = getActiveCampaigns(filteredCampaigns);
       setIsUserCampaignsFetched(true);
-      setUserCampaigns(filteredCampaigns);
+      setUserCampaigns(activeUserCampaigns);
     } catch (error) {
       return {
         status: 'failure',
@@ -109,6 +96,11 @@ export const StateContextProvider = ({ children }) => {
         message: 'Error while fetching campaigns. Please refresh the page and try again.',
       };
     }
+  };
+
+  const getActiveCampaigns = (campaigns) => {
+    const activeCampaigns = campaigns.filter((i) => i.deadline > date);
+    return activeCampaigns;
   };
 
   const donate = async (pId, amount) => {
@@ -234,9 +226,11 @@ export const StateContextProvider = ({ children }) => {
         getUserCampaigns,
         donate,
         getDonations,
-        getActiveCampaigns,
         isUserCampaignsFetched,
         userCampaigns,
+        exploreCampaigns,
+        isExploreCampaignsFetched,
+        setIsExploreCampaignsFetched,
         getUserNfts,
         userCreatedNfts,
         isUserNFTsFetched,

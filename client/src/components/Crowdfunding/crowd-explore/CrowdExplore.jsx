@@ -7,25 +7,23 @@ import { useStateContext } from '../../../context';
 
 const CrowdExplore = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const [campaigns, setCampaigns] = useState([]);
 
-  const { address, contract, getActiveCampaigns } = useStateContext();
+  const { address, contract, getCampaigns, isExploreCampaignsFetched, exploreCampaigns } = useStateContext();
 
   const fetchCampaigns = async () => {
     setIsLoading(true);
-    const data = await getActiveCampaigns();
-    setCampaigns(data);
+    await getCampaigns();
     setIsLoading(false);
   };
 
   useEffect(() => {
-    if (contract) fetchCampaigns();
+    if (contract && !isExploreCampaignsFetched) fetchCampaigns();
   }, [address, contract]);
 
   return (
     <div>
       <CrowdNavbar />
-      <ExploreCampaigns title="All Campaigns" isLoading={isLoading} campaigns={campaigns} />
+      <ExploreCampaigns title="All Campaigns" isLoading={isLoading} campaigns={exploreCampaigns} />
       <Footer />
     </div>
   );

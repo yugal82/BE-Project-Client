@@ -19,7 +19,7 @@ const CreateCampaign = () => {
   const [txnErrorMsg, setTxnErrorMsg] = useState('');
   const [success, setSuccess] = useState(false);
 
-  const { createCampaign } = useStateContext();
+  const { createCampaign, setIsExploreCampaignsFetched } = useStateContext();
 
   const [form, setForm] = useState({
     name: '',
@@ -54,6 +54,7 @@ const CreateCampaign = () => {
         setIsLoading(false);
         if (tx?.status === 'success') {
           setSuccess(true);
+          setIsExploreCampaignsFetched(false);
           setTimeout(() => {
             navigate('/crowdfunding/explore');
           }, 5000);
