@@ -163,7 +163,7 @@ const ProfileComponent = ({
                       <p className="text-base sm:text-xl">You have no active campaigns yet.</p>
                     </div>
                   ) : (
-                    <div className="w-full grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6 mt-10">
+                    <div className="w-full grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 gap-6 mt-10">
                       {userCampaigns?.map((campaign) => (
                         <FundCard key={campaign.id} {...campaign} handleClick={() => handleNavigate(campaign)} />
                       ))}
