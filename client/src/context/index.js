@@ -3,6 +3,7 @@ import { useAddress, useContract, useMetamask, useContractWrite } from '@thirdwe
 import { ethers } from 'ethers';
 import { getNFTMarketplaceContractObject } from '../utils/contract';
 import { fetchDataOfItemFromIPFS, getUserInfo } from '../api/nft-marketplace-api';
+import { all } from 'axios';
 
 const StateContext = createContext();
 
@@ -23,6 +24,8 @@ export const StateContextProvider = ({ children }) => {
 
   const address = useAddress();
   const connect = useMetamask();
+
+  const date = new Date();
 
   const publishCampaign = async (form) => {
     try {
@@ -71,6 +74,25 @@ export const StateContextProvider = ({ children }) => {
       pId: i,
     }));
     return parsedCampaigns;
+  };
+
+  const getActiveCampaigns = async () => {
+    const campaigns = await contract.call('getCampaigns');
+
+    // console.log(campaigns);
+    const allCampaigns = campaigns.map((campaign, i) => ({
+      owner: campaign.owner,
+      title: campaign.title,
+      description: campaign.description,
+      target: ethers.utils.formatEther(campaign.target.toString()),
+      deadline: campaign.deadline.toNumber(),
+      amountCollected: ethers.utils.formatEther(campaign.amountCollected.toString()),
+      image: campaign.image,
+      pId: i,
+    }));
+
+    const activeCampaigns = allCampaigns.filter((i) => i.deadline > date);
+    return activeCampaigns;
   };
 
   const getUserCampaigns = async () => {
@@ -212,6 +234,7 @@ export const StateContextProvider = ({ children }) => {
         getUserCampaigns,
         donate,
         getDonations,
+        getActiveCampaigns,
         isUserCampaignsFetched,
         userCampaigns,
         getUserNfts,

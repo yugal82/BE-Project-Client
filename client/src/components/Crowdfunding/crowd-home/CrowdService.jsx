@@ -4,17 +4,17 @@ import CrowdServiceCard from './CrowdServiceCard';
 const crowdservices = [
   {
     step: 'Step 1',
-    img: './assets/metamask.png',
+    img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/MetaMask_Fox.svg/1200px-MetaMask_Fox.svg.png',
     description: 'Connect to wallet, explore and create new campaigns.',
   },
   {
     step: 'Step 2',
-    img: './assets/campaign.svg',
+    img: 'https://cdn-icons-png.flaticon.com/512/3867/3867424.png',
     description: 'Create your own campaign and setup funding to your cause.',
   },
   {
     step: 'Step 3',
-    img: './assets/funding.png',
+    img: 'https://cdn-icons-png.flaticon.com/512/1472/1472502.png',
     description: 'List your campaign on our platform and receive funding for the same.',
   },
 ];
