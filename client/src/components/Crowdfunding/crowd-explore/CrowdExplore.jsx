@@ -9,11 +9,11 @@ const CrowdExplore = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [campaigns, setCampaigns] = useState([]);
 
-  const { address, contract, getCampaigns } = useStateContext();
+  const { address, contract, getActiveCampaigns } = useStateContext();
 
   const fetchCampaigns = async () => {
     setIsLoading(true);
-    const data = await getCampaigns();
+    const data = await getActiveCampaigns();
     setCampaigns(data);
     setIsLoading(false);
   };
