@@ -6,6 +6,8 @@ import { fetchDataOfItemFromIPFS, getUserInfo } from '../api/nft-marketplace-api
 
 const StateContext = createContext();
 
+const date = new Date();
+
 export const StateContextProvider = ({ children }) => {
   const [userCreatedNfts, setUserCreatedNfts] = useState([]);
   const [userListedNfts, setUserListedNfts] = useState([]);
