@@ -6,21 +6,16 @@ import ExploreCampaigns from './ExploreCampaigns';
 import { useStateContext } from '../../../context';
 
 const CrowdExplore = () => {
-  const date = new Date();
-
   const [isLoading, setIsLoading] = useState(false);
   const [campaigns, setCampaigns] = useState([]);
 
-  const { address, contract, getCampaigns } = useStateContext();
+  const { address, contract, getActiveCampaigns } = useStateContext();
 
   const fetchCampaigns = async () => {
     setIsLoading(true);
-    const data = await getCampaigns();
-    const filteredCampaigns = data.filter((i) => i.deadline > date);
-    setCampaigns(filteredCampaigns);
+    const data = await getActiveCampaigns();
+    setCampaigns(data);
     setIsLoading(false);
-
-    // console.log(filteredArray);
   };
 
   useEffect(() => {
