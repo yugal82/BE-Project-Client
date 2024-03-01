@@ -14,7 +14,7 @@ const Hero = () => {
           </p>
         </div>
         <div className="w-full flex items-center justify-center">
-          <img src="./assets/Hero-Banner.png" alt="" />
+          <img src="./assets/Hero-Banner.webp" alt="" />
         </div>
       </div>
     </div>

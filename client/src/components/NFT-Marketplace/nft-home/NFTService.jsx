@@ -4,22 +4,22 @@ import NFTServiceCard from './NFTServiceCard';
 const nftservices = [
   {
     step: 'Step 1',
-    img: './assets/service-1.png',
+    img: './assets/service-1.webp',
     description: 'Connect to wallet, discover, explore, & mint new NFTs.',
   },
   {
     step: 'Step 2',
-    img: './assets/service-2.png',
+    img: './assets/service-2.webp',
     description: 'Create your new NFT token and get ready to earn money by flaunting your creativity.',
   },
   {
     step: 'Step 3',
-    img: './assets/service-3.png',
+    img: './assets/service-3.webp',
     description: 'List your NFT item for sale on our marketplace and receive bids.',
   },
   {
     step: 'Step 4',
-    img: './assets/service-4.png',
+    img: './assets/service-4.webp',
     description: 'Trade NFT tokens and earn money.',
   },
 ];

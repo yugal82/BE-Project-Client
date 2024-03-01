@@ -5,32 +5,32 @@ const features = [
   {
     header: 'NFT Marketplace',
     description: 'Earn money by leveraging your creative side by creating and selling NFTs.',
-    imageURL: './assets/nft-marketplace-icon.png',
+    imageURL: './assets/nft-marketplace-icon.webp',
   },
   {
     header: 'Crowdfunding Campaigns',
     description: 'Create crowdfunding campaigns and raise money for a good cause.',
-    imageURL: './assets/crowdfunding-icon.png',
+    imageURL: './assets/crowdfunding-icon.webp',
   },
   {
     header: 'Secure',
     description: 'Safely trade NFTs and launch secure crowdfunding campaigns with ease.',
-    imageURL: './assets/secure-icon.png',
+    imageURL: './assets/secure-icon.webp',
   },
   {
     header: 'Conversational UI',
     description: 'Never find yourself struggling to navigate again.',
-    imageURL: './assets/conversation.png',
+    imageURL: './assets/conversation.webp',
   },
   {
     header: 'Scalable',
     description: 'Enjoy limitless growth with our scalable solution, designed to expand seamlessly.',
-    imageURL: './assets/scalable.png',
+    imageURL: './assets/scalable.webp',
   },
   {
     header: 'No Ads',
     description: 'We know you do not like annoying pop-ups, 100% Ads free.',
-    imageURL: './assets/noads.png',
+    imageURL: './assets/noads.webp',
   },
 ];
 

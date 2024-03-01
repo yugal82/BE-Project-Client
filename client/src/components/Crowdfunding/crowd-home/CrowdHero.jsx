@@ -12,7 +12,7 @@ const CrowdHero = () => {
         </div>
       </div>
       <div className="w-full flex items-center justify-center">
-        <img className="rounded-3xl" src="./assets/crowd-banner.jpg" alt="" />
+        <img className="rounded-3xl" src="./assets/crowd-banner.webp" alt="" />
       </div>
     </div>
   );

@@ -11,7 +11,7 @@ const NFTHero = () => {
           </p>
         </div>
         <div className="mt-8 sm:mt-0 w-full flex items-center justify-center">
-          <img className="w-80 rounded-3xl" src="./assets/NFT-Marketplace-Banner.jpg" alt="" />
+          <img className="w-80 rounded-3xl" src="./assets/NFT-Marketplace-Banner.webp" alt="" />
         </div>
       </div>
     </div>
