@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Pagination, Navigation } from 'swiper/modules';
 import SwiperCore from 'swiper';
@@ -25,6 +25,20 @@ const breakpoints = {
 
 const Slider = ({ address, marketListedTokens }) => {
   SwiperCore.use([Autoplay]);
+
+  const comparePrices = (a, b) => {
+    if (a.price > b.price) return -1;
+    if (a.price < b.price) return 1;
+    return 0;
+  };
+
+  useEffect(() => {
+    if (marketListedTokens) {
+      marketListedTokens?.sort(comparePrices);
+      marketListedTokens = marketListedTokens?.slice(0, 5);
+    }
+  }, [marketListedTokens]);
+
   return (
     <div className="relative">
       <div className="nextEl hidden lg:block absolute top-[40%] -right-14">
